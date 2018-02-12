@@ -78,6 +78,6 @@ public class RobotExample {
         // Move away 
         arsenis.move(2);
         
-        
+                
     }
 }
