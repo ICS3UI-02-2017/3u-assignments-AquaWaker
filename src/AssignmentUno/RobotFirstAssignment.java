@@ -20,10 +20,10 @@ public class RobotFirstAssignment {
     public static void main(String[] args) {
         
         // Create a city for the robot
-        City lav = new City();
+        City pym = new City();
         
         // Put a robot in lav
-        RobotSE arsenis = new RobotSE(lav, 2, 1, Direction.EAST);
+        RobotSE ultron = new RobotSE(pym, 2, 1, Direction.EAST);
         
     }
 }
