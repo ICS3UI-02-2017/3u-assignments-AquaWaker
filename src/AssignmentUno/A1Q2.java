@@ -7,14 +7,15 @@ package AssignmentUno;
 import becker.robots.City;
 import becker.robots.Direction;
 import becker.robots.RobotSE;
+import becker.robots.Thing;
 import becker.robots.Wall;
 import java.awt.Color;
 
 /**
- *
+ * Answerign A1Q2
  * @author pritb9521
  */
-public class A1Q1 {
+public class A1Q2 {
 
     /**
      * @param args the command line arguments
@@ -25,12 +26,12 @@ public class A1Q1 {
         City pym = new City();
         
         // Put a robot in lav
-        RobotSE ultron = new RobotSE(pym, 0, 2, Direction.WEST);
+        RobotSE karel = new RobotSE(pym, 1, 2, Direction.SOUTH);
         
         // Set the robot's colour to black
-        ultron.setColor(Color.BLACK);
+        karel.setColor(Color.BLACK);
         
-        // Create the walls 
+        // Create walls in the city
         
         // Walls facing West
         new Wall(pym, 1, 1, Direction.WEST);
@@ -40,36 +41,38 @@ public class A1Q1 {
         new Wall(pym, 1, 1, Direction.NORTH);
         new Wall(pym, 1, 2, Direction.NORTH);
         
-        // Walls facing East
+        // Wall facing East
         new Wall(pym, 1, 2, Direction.EAST);
-        new Wall(pym, 2, 2, Direction.EAST);
         
         // Walls facing South
+        new Wall(pym, 1, 2, Direction.SOUTH);
         new Wall(pym, 2, 1, Direction.SOUTH);
-        new Wall(pym, 2, 2, Direction.SOUTH);
         
-        // ultron moves forward two spaces
-        ultron.move(2);
+        // Create a newspaper in the world
+        Thing newspaper = new Thing(pym, 2, 2);
         
-        ultron.turnLeft();
+        // Change the color of the particle to black
+        newspaper.setColor(Color.BLACK);
         
-        // ultron moves down three spaces 
-        ultron.move(3);
+        // Navigate karel to the newspaper
+        karel.turnRight();
+        karel.move();
+        karel.turnLeft();
+        karel.move();
+        karel.turnLeft();
+        karel.move();
         
-        ultron.turnLeft();
+        // Have karel pick up the newspaper
+        karel.pickThing();
         
-        // ultron moves right three spaces
-        ultron.move(3);
-        
-        ultron.turnLeft();
-        
-        // ultron moves up three spaces
-        ultron.move(3);
-        
-        ultron.turnLeft();
-        
-        // ultron returns to the starting position
-        ultron.move();
+        // Navigate karel back to bed where he was
+        karel.turnAround();
+        karel.move();
+        karel.turnRight();
+        karel.move();
+        karel.turnRight();
+        karel.move();
+        karel.turnRight();
         
     }
 }
