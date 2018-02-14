@@ -12,7 +12,7 @@ import becker.robots.Wall;
 import java.awt.Color;
 
 /**
- * Answerign A1Q2
+ * Answering A1Q2
  * @author pritb9521
  */
 public class A1Q2 {
@@ -22,13 +22,13 @@ public class A1Q2 {
      */
     public static void main(String[] args) {
         
-        // Create a city for the robot
+        // Create a city for karel
         City pym = new City();
         
-        // Put a robot in lav
+        // Put karel in pym
         RobotSE karel = new RobotSE(pym, 1, 2, Direction.SOUTH);
         
-        // Set the robot's colour to black
+        // Set karel's colour to black
         karel.setColor(Color.BLACK);
         
         // Create walls in the city
