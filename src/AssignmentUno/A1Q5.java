@@ -64,12 +64,27 @@ public class A1Q5 {
         // Create a thread to move the maria at the same time as karel
         new Thread(){
             public void run(){
-                // Have Maria move and pick up the
+                // Have Maria move and pick up the ring, food, and ball
                 maria.move();
-            
+                maria.pickThing();
+                maria.turnLeft();
+                maria.move();
+                maria.pickThing();
+                maria.turnLeft();
+                maria.move();
+                maria.pickThing();
             
         }
        }.start();
         
+        // Have karel move around, pick up the gold and the something and meet up with maria
+        karel.turnAround();
+        karel.move();
+        karel.turnRight();
+        karel.move();
+        karel.pickThing();
+        karel.move();
+        karel.pickThing();
+        karel.turnLeft();
     }
 }
