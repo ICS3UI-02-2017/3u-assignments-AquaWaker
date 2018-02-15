@@ -48,6 +48,7 @@ public class Conditions {
             
             if(jeph.countThingsInBackpack() >= 1){
                 
+                // change jeph's colour
                 jeph.setColor(Color.ORANGE);
                 
                 if(jeph.isFacingSouth()){

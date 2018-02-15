@@ -12,7 +12,7 @@ import becker.robots.Wall;
 import java.awt.Color;
 
 /**
- *
+ * Answering A1Q5
  * @author pritb9521
  */
 public class A1Q5 {
