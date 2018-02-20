@@ -30,32 +30,32 @@ public class A2Q3 {
         while (!(arsenis.getStreet() == 0)) {
 
             // if the he is above the origin, and not facing south, turn
-            while (arsenis.getAvenue() <= -1 && arsenis.getDirection() != Direction.SOUTH) {
-                arsenis.turnLeft();
+            if (arsenis.getAvenue() <= -1 && arsenis.getDirection() != Direction.SOUTH) {
+                arsenis.turnRight();
 
             }
 
             // if the he is below the origin, and not facing north, turn
-            while (arsenis.getAvenue() >= 1 && arsenis.getDirection() != Direction.NORTH) {
-                arsenis.turnRight();
+            if (arsenis.getAvenue() >= 1 && arsenis.getDirection() != Direction.NORTH) {
+                arsenis.turnLeft();
 
             }
             // move til he is on the origin street
             arsenis.move();
-            
+
 
         }
         // checking to see if he is on the right avenue, if he isn't, move to it
         while (!(arsenis.getAvenue() == 0)) {
 
             // if the he is to the left of the origin, and not facing east, turn
-            while (arsenis.getStreet() <= 0 && arsenis.getDirection() != Direction.EAST) {
+            if (arsenis.getStreet() <= 0 && arsenis.getDirection() != Direction.EAST) {
                 arsenis.turnLeft();
 
             }
 
             // if the he is to the right of the origin, and not facing west, turn
-            while (arsenis.getStreet() >= 0 && arsenis.getDirection() != Direction.WEST) {
+            if (arsenis.getStreet() >= 0 && arsenis.getDirection() != Direction.WEST) {
                 arsenis.turnRight();
 
             }

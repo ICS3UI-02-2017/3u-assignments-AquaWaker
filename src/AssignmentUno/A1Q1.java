@@ -24,7 +24,7 @@ public class A1Q1 {
         // Create a city for the robot
         City pym = new City();
         
-        // Put a robot in lav
+        // Put a robot in pym
         RobotSE ultron = new RobotSE(pym, 0, 2, Direction.WEST);
         
         // Set the robot's colour to black
