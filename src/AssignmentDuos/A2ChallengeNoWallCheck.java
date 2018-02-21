@@ -12,17 +12,15 @@ import becker.robots.Wall;
 import java.awt.Color;
 
 /**
- * Trying the Challenge question
  *
  * @author pritb9521
  */
-public class A2Challenge {
+public class A2ChallengeNoWallCheck {
 
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-
         City pym = new City();
 
         // create a robot
@@ -60,38 +58,40 @@ public class A2Challenge {
         new Wall(pym, 1, 6, Direction.NORTH);
         new Wall(pym, 1, 6, Direction.EAST);
         new Wall(pym, 2, 6, Direction.EAST);
-        new Wall(pym, 2, 6, Direction.SOUTH);
-        new Wall(pym, 2, 5, Direction.SOUTH);
-        new Wall(pym, 2, 4, Direction.SOUTH);
-        new Wall(pym, 2, 3, Direction.SOUTH);
-        new Wall(pym, 3, 2, Direction.EAST);
-        
+        new Wall(pym, 3, 6, Direction.SOUTH);
+        new Wall(pym, 3, 5, Direction.SOUTH);
+        new Wall(pym, 3, 4, Direction.SOUTH);
+        new Wall(pym, 3, 3, Direction.SOUTH);
+        new Wall(pym, 4, 2, Direction.EAST);
+
+        new Wall(pym, 3, 6, Direction.EAST);
+
         // create the second driveway
-        new Wall(pym, 4, 3, Direction.NORTH);
-        new Wall(pym, 4, 4, Direction.NORTH);
-        new Wall(pym, 4, 5, Direction.NORTH);
-        new Wall(pym, 4, 5, Direction.EAST);
-        new Wall(pym, 4, 5, Direction.SOUTH);
-        new Wall(pym, 4, 4, Direction.SOUTH);
-        new Wall(pym, 4, 3, Direction.SOUTH);
-        new Wall(pym, 5, 2, Direction.EAST);
+        new Wall(pym, 5, 3, Direction.NORTH);
+        new Wall(pym, 5, 4, Direction.NORTH);
+        new Wall(pym, 5, 5, Direction.NORTH);
+        new Wall(pym, 5, 5, Direction.EAST);
+        new Wall(pym, 5, 5, Direction.SOUTH);
+        new Wall(pym, 5, 4, Direction.SOUTH);
+        new Wall(pym, 5, 3, Direction.SOUTH);
+        new Wall(pym, 6, 2, Direction.EAST);
 
         // create the third driveway
-        new Wall(pym, 6, 2, Direction.EAST);
-        new Wall(pym, 7, 3, Direction.NORTH);
-        new Wall(pym, 7, 4, Direction.NORTH);
-        new Wall(pym, 7, 5, Direction.NORTH);
-        new Wall(pym, 7, 6, Direction.NORTH);
-        new Wall(pym, 7, 7, Direction.NORTH);
-        new Wall(pym, 7, 7, Direction.EAST);
+        new Wall(pym, 7, 2, Direction.EAST);
+        new Wall(pym, 8, 3, Direction.NORTH);
+        new Wall(pym, 8, 4, Direction.NORTH);
+        new Wall(pym, 8, 5, Direction.NORTH);
+        new Wall(pym, 8, 6, Direction.NORTH);
+        new Wall(pym, 8, 7, Direction.NORTH);
         new Wall(pym, 8, 7, Direction.EAST);
-        new Wall(pym, 8, 7, Direction.SOUTH);
-        new Wall(pym, 8, 6, Direction.SOUTH);
-        new Wall(pym, 8, 5, Direction.SOUTH);
-        new Wall(pym, 8, 4, Direction.SOUTH);
-        new Wall(pym, 8, 3, Direction.SOUTH);
-        new Wall(pym, 9, 2, Direction.EAST);
-        new Wall(pym, 9, 2, Direction.SOUTH);
+        new Wall(pym, 9, 7, Direction.EAST);
+        new Wall(pym, 9, 7, Direction.SOUTH);
+        new Wall(pym, 9, 6, Direction.SOUTH);
+        new Wall(pym, 9, 5, Direction.SOUTH);
+        new Wall(pym, 9, 4, Direction.SOUTH);
+        new Wall(pym, 9, 3, Direction.SOUTH);
+        new Wall(pym, 10, 2, Direction.EAST);
+        new Wall(pym, 10, 2, Direction.SOUTH);
 
 
 
@@ -114,7 +114,7 @@ public class A2Challenge {
         Thing snow14 = new Thing(pym, 8, 3);
         Thing snow15 = new Thing(pym, 8, 4);
         Thing snow16 = new Thing(pym, 8, 6);
-        
+
         // Make all the snow white
         snow1.setColor(Color.white);
         snow2.setColor(Color.white);
@@ -133,52 +133,34 @@ public class A2Challenge {
         snow15.setColor(Color.white);
         snow16.setColor(Color.white);
 
-        // Get karel to shovel the driveway
-        while (karel.getStreet() != 10) {
-
-            /**
-             * When there is nothing in front of karel, turn left and pick up a
-             * thing if he can, then move forward
-             */
-            while (karel.frontIsClear()) {
-                karel.turnLeft();
-                if (!(karel.frontIsClear())) {
-                    karel.turnRight();
+        while (true) {
+            // make karel check for a driveway
+            while (karel.getAvenue() == 2) {
+                if (karel.frontIsClear()) {
+                    karel.move();
+                    karel.turnLeft();
                 }
                 if (karel.canPickThing()) {
-                    karel.pickThing();
+                    karel.pickAllThings();
                 }
-                karel.move();
-
             }
-            if (!(karel.frontIsClear())) {
-                if (karel.getAvenue() == 2) {
-                    karel.putAllThings();
-                    karel.turnLeft();
-                    karel.move();
-                    karel.turnLeft();
+
+            while (karel.getAvenue() > 2) {
+                if (karel.canPickThing()) {
+                    karel.pickAllThings();
                 }
-                karel.turnRight();
                 if (karel.frontIsClear()) {
-                    if (karel.canPickThing()) {
-                        karel.pickThing();
-                    }
                     karel.move();
+                } else {
+                    karel.turnRight();
+                    if (!(karel.frontIsClear())) {
+                        karel.turnRight();
+                    } else {
+                        karel.move();
+                        karel.turnRight();
+                    }
                 }
             }
-
-        }
-        // once karel is done shovelling everything to the 
-        while(tina.getStreet() != 9){
-            if(tina.canPickThing()){
-                tina.pickAllThings();
-            }
-            tina.move();
-        }
-        // Place all the snow down in the final spot
-        if(tina.getStreet() == 9){
-            tina.putAllThings();
         }
     }
-    
 }
