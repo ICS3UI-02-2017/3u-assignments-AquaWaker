@@ -38,6 +38,7 @@ public class A2ChallengeNoWallCheck {
         new Wall(pym, 7, 0, Direction.WEST);
         new Wall(pym, 8, 0, Direction.WEST);
         new Wall(pym, 9, 0, Direction.WEST);
+        new Wall(pym, 10, 0, Direction.WEST);
 
         new Wall(pym, 0, 1, Direction.EAST);
         new Wall(pym, 1, 1, Direction.EAST);
@@ -49,6 +50,7 @@ public class A2ChallengeNoWallCheck {
         new Wall(pym, 7, 1, Direction.EAST);
         new Wall(pym, 8, 1, Direction.EAST);
         new Wall(pym, 9, 1, Direction.EAST);
+        new Wall(pym, 10, 1, Direction.EAST);
 
         // create the first driveway
         new Wall(pym, 0, 2, Direction.EAST);
@@ -104,16 +106,16 @@ public class A2ChallengeNoWallCheck {
         Thing snow6 = new Thing(pym, 2, 4);
         Thing snow7 = new Thing(pym, 2, 6);
 
-        Thing snow8 = new Thing(pym, 4, 2);
-        Thing snow9 = new Thing(pym, 4, 3);
-        Thing snow10 = new Thing(pym, 4, 4);
+        Thing snow8 = new Thing(pym, 5, 2);
+        Thing snow9 = new Thing(pym, 5, 3);
+        Thing snow10 = new Thing(pym, 5, 4);
 
-        Thing snow11 = new Thing(pym, 7, 2);
-        Thing snow12 = new Thing(pym, 7, 3);
-        Thing snow13 = new Thing(pym, 7, 7);
-        Thing snow14 = new Thing(pym, 8, 3);
-        Thing snow15 = new Thing(pym, 8, 4);
-        Thing snow16 = new Thing(pym, 8, 6);
+        Thing snow11 = new Thing(pym, 8, 2);
+        Thing snow12 = new Thing(pym, 8, 3);
+        Thing snow13 = new Thing(pym, 8, 7);
+        Thing snow14 = new Thing(pym, 9, 3);
+        Thing snow15 = new Thing(pym, 9, 4);
+        Thing snow16 = new Thing(pym, 9, 6);
 
         // Make all the snow white
         snow1.setColor(Color.white);
@@ -133,18 +135,32 @@ public class A2ChallengeNoWallCheck {
         snow15.setColor(Color.white);
         snow16.setColor(Color.white);
 
-        while (true) {
-            // make karel check for a driveway
-            while (karel.getAvenue() == 2) {
+        while (karel.getStreet() != 10) {
+            /**
+             * make karel check for a driveway, if there is one, move onto it if
+             * there is a wall, turn left
+             */
+            while (karel.getAvenue() == 2 && karel.getStreet() != 10) {
                 if (karel.frontIsClear()) {
+                    if (karel.countThingsInBackpack() > 0) {
+                        karel.putAllThings();
+                    }
                     karel.move();
                     karel.turnLeft();
+                    if (karel.frontIsClear()) {
+                        karel.move();
+                    } else {
+                        karel.turnRight();
+                    }
+                } else {
+                    karel.turnLeft();
                 }
-                if (karel.canPickThing()) {
-                    karel.pickAllThings();
-                }
-            }
 
+            }
+            /**
+             * Once karel is on a driveway, move up and down it to shovel all
+             * the snow up and move it to the sidewalk
+             */
             while (karel.getAvenue() > 2) {
                 if (karel.canPickThing()) {
                     karel.pickAllThings();
@@ -161,6 +177,17 @@ public class A2ChallengeNoWallCheck {
                     }
                 }
             }
+        }
+        // once karel is done shovelling everything to the 
+        while (tina.getStreet() != 10) {
+            if (tina.canPickThing()) {
+                tina.pickAllThings();
+            }
+            tina.move();
+        }
+        // Place all the snow down in the final spot
+        if (tina.getStreet() == 10) {
+            tina.putAllThings();
         }
     }
 }

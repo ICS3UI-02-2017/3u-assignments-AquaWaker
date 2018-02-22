@@ -65,7 +65,7 @@ public class A2Challenge {
         new Wall(pym, 2, 4, Direction.SOUTH);
         new Wall(pym, 2, 3, Direction.SOUTH);
         new Wall(pym, 3, 2, Direction.EAST);
-        
+
         // create the second driveway
         new Wall(pym, 4, 3, Direction.NORTH);
         new Wall(pym, 4, 4, Direction.NORTH);
@@ -114,7 +114,7 @@ public class A2Challenge {
         Thing snow14 = new Thing(pym, 8, 3);
         Thing snow15 = new Thing(pym, 8, 4);
         Thing snow16 = new Thing(pym, 8, 6);
-        
+
         // Make all the snow white
         snow1.setColor(Color.white);
         snow2.setColor(Color.white);
@@ -169,16 +169,15 @@ public class A2Challenge {
 
         }
         // once karel is done shovelling everything to the 
-        while(tina.getStreet() != 9){
-            if(tina.canPickThing()){
+        while (tina.getStreet() != 9) {
+            if (tina.canPickThing()) {
                 tina.pickAllThings();
             }
             tina.move();
         }
         // Place all the snow down in the final spot
-        if(tina.getStreet() == 9){
+        if (tina.getStreet() == 9) {
             tina.putAllThings();
         }
     }
-    
 }
