@@ -12,6 +12,7 @@ import becker.robots.Wall;
 
 /**
  * Completing Quiz 1
+ *
  * @author pritb9521
  */
 public class Quiz1 {
@@ -20,13 +21,13 @@ public class Quiz1 {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        
+
         // Create a city
         City pym = new City();
-        
+
         // Create a robot in the city
         RobotSE arsenis = new RobotSE(pym, 4, 0, Direction.EAST);
-        
+
         // Create the staircase
         new Wall(pym, 4, 2, Direction.WEST);
         new Wall(pym, 4, 2, Direction.NORTH);
@@ -40,17 +41,17 @@ public class Quiz1 {
         new Wall(pym, 3, 6, Direction.EAST);
         new Wall(pym, 4, 7, Direction.NORTH);
         new Wall(pym, 4, 7, Direction.EAST);
-        
+
         // Create the lightbulbs to pick up
         new Thing(pym, 4, 1);
         new Thing(pym, 3, 2);
         new Thing(pym, 2, 3);
         new Thing(pym, 1, 4);
-        
-        /** Have arsenis move to the top of the staircase, picking up the 
-         *  lights on the way
+
+        /**
+         * Have arsenis move to the top of the staircase, picking up the lights
+         * on the way
          */
-        
         arsenis.move();
         arsenis.pickThing();
         arsenis.turnLeft();
@@ -68,9 +69,10 @@ public class Quiz1 {
         arsenis.turnRight();
         arsenis.move();
         arsenis.pickThing();
-        
-        /** Have arsenis place the lights on the other side of the staircase and 
-         *  reach the bottom
+
+        /**
+         * Have arsenis place the lights on the other side of the staircase and
+         * reach the bottom
          */
         arsenis.move();
         arsenis.putThing();
