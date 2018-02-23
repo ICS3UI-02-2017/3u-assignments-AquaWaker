@@ -22,13 +22,17 @@ public class A3Q3 {
         // Create a city
         City pym = new City();
         
-        // Tell how many things start in the backpack
-        int thingsInBackpack = 20;
+        // Tell how many seeds start in the backpack
+        int seedsInBackpack = 20;
         
         // Create a robot in the city
-        RobotSE arsenis = new RobotSE(pym, 1, 1, Direction.EAST, thingsInBackpack);
+        RobotSE arsenis = new RobotSE(pym, 1, 1, Direction.EAST, seedsInBackpack);
         
-        for (;thingsInBackpack <= 20;) {
+        for (;seedsInBackpack <= 20;) {
+            if(arsenis.getAvenue() != 5){
+                arsenis.putThing();
+                seedsInBackpack = seedsInBackpack
+            }
             
         }
     }
