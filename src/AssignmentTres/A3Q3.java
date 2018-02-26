@@ -28,10 +28,11 @@ public class A3Q3 {
         // Create a robot in the city
         RobotSE arsenis = new RobotSE(pym, 1, 1, Direction.EAST, seedsInBackpack);
         
+        
         for (;seedsInBackpack <= 20;) {
             if(arsenis.getAvenue() != 5){
                 arsenis.putThing();
-                seedsInBackpack = seedsInBackpack
+                seedsInBackpack = seedsInBackpack - 1;
             }
             
         }
