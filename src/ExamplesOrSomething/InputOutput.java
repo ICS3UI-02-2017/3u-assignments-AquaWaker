@@ -78,7 +78,14 @@ public class InputOutput {
             }
             
         }
-
-
+        double num = 2.56;
+        
+        num = Math.round(num);
+        
+        // Math.round   4.6 = 5
+        // Math.ceil    4.3 = 5
+        // Math.floor   5.9 = 5
+        // Math.pow(b,e) b^e
+        // Math.sqrt
     }
 }
