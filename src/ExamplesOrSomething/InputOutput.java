@@ -73,13 +73,10 @@ public class InputOutput {
                 
                 if(yesTwo.equals("yes")){
                     System.out.println("");
+                    System.out.println("Man... I don't know how to stop you... Let's just... leave it at this...");
                 }
             }
-            // your an idiot loop..
-            /**
-             * System.out.println("Try again...");
-             * 
-             */
+            
         }
 
 
