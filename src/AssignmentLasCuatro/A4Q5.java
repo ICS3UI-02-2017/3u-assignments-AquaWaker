@@ -28,42 +28,42 @@ public class A4Q5 {
         // Checks for first test scores
         System.out.println("");
         System.out.print("What was the first test out of?: ");
-        int outOfOne = input.nextInt();
+        double outOfOne = input.nextInt();
         
         System.out.print("What mark did you get?: ");
-        int scoreOne = input.nextInt();
+        double scoreOne = input.nextInt();
         
         // Checks for second test scores
         System.out.println("");
         System.out.print("What was the second test out of?: ");
-        int outOfTwo = input.nextInt();
+        double outOfTwo = input.nextInt();
         
         System.out.print("What mark did you get?: ");
-        int scoreTwo = input.nextInt();
+        double scoreTwo = input.nextInt();
         
         // Checks for third test scores
         System.out.println("");
         System.out.print("What was the third test out of?: ");
-        int outOfThree = input.nextInt();
+        double outOfThree = input.nextInt();
         
         System.out.print("What mark did you get?: ");
-        int scoreThree = input.nextInt();
+        double scoreThree = input.nextInt();
         
         // Checks for four test scores
         System.out.println("");
         System.out.print("What was the fourth test out of?: ");
-        int outOfFour = input.nextInt();
+        double outOfFour = input.nextInt();
         
         System.out.print("What mark did you get?: ");
-        int scoreFour = input.nextInt();
+        double scoreFour = input.nextInt();
         
         // Checks for five test scores
         System.out.println("");
         System.out.print("What was the fifth test out of?: ");
-        int outOfFive = input.nextInt();
+        double outOfFive = input.nextInt();
         
         System.out.print("What mark did you get?: ");
-        int scoreFive = input.nextInt();
+        double scoreFive = input.nextInt();
         
         System.out.println("");
         
