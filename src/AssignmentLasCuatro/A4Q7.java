@@ -31,11 +31,12 @@ public class A4Q7 {
             int diceRoll = input.nextInt();
 
             // Stops the player from rolling unreal numbers
-            if (diceRoll == 1 || diceRoll >= 13) {
+            while (diceRoll == 1 || diceRoll >= 13) {
                 System.out.println("Nice try... you're rolling two dice, it has to be between 2 and 12");
                 System.out.print("Enter sum of your dice: ");
                 diceRoll = input.nextInt();
-            } else if (diceRoll == 0) { // Allows the player to quit the game
+            }
+            if (diceRoll == 0) { // Allows the player to quit the game
                 System.out.println("You quit!");
                 System.exit(0);
             }
@@ -61,21 +62,21 @@ public class A4Q7 {
                 System.out.println("Congradulations!  You hit a ladder!");
                 playerPosition = 86;
             }
-                while (playerPosition > 100) {
-                    System.out.println("Seems you reached too big of a position, please reroll");
-                    playerPosition = playerPosition - diceRoll;
+            while (playerPosition > 100) {
+                System.out.println("Seems you reached too big of a position, please reroll");
+                playerPosition = playerPosition - diceRoll;
 
-                    // roll the dice and move
-                    System.out.print("Enter sum of your dice: ");
-                    diceRoll = input.nextInt();
+                // roll the dice and move
+                System.out.print("Enter sum of your dice: ");
+                diceRoll = input.nextInt();
 
-                    // Move the player
-                    playerPosition = playerPosition + diceRoll;
-                }
-                // Tells the player where they are
-                System.out.println("You are now on square " + playerPosition);
+                // Move the player
+                playerPosition = playerPosition + diceRoll;
             }
-            // When the player reaches the final position they get congradulated
-            System.out.println("Congradulations!  You won!");
+            // Tells the player where they are
+            System.out.println("You are now on square " + playerPosition);
         }
+        // When the player reaches the final position they get congradulated
+        System.out.println("Congradulations!  You won!");
     }
+}
