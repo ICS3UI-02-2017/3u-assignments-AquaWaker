@@ -37,10 +37,12 @@ public class UbbiDubbi2ndTry {
 
         // Rebuild the word
         for (int check = 0; check < length; check++) {
+            // checks for a non-vowel letter
             if (vowel.indexOf(test.charAt(check)) == -1) {
                 char c = test.charAt(check);
                 translated = translated + c;
-
+                
+            // if there is is a vowel letter 
             } else if (check > 0) {
                 if (vowel.indexOf(test.charAt(check - 1)) != -1) {
                     char v = test.charAt(check);
