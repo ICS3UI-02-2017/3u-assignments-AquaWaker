@@ -41,8 +41,8 @@ public class UbbiDubbi2ndTry {
             if (vowel.indexOf(test.charAt(check)) == -1) {
                 char c = test.charAt(check);
                 translated = translated + c;
-                
-            // if there is is a vowel letter 
+
+            // if there is a vowel letter at the begining don't check before
             } else if (check > 0) {
                 if (vowel.indexOf(test.charAt(check - 1)) != -1) {
                     char v = test.charAt(check);
@@ -51,15 +51,16 @@ public class UbbiDubbi2ndTry {
                     char v = test.charAt(check);
                     translated = translated + "ub" + v;
                 }
+            // if the vowel is in the middle of the word
             } else if (vowel.indexOf(test.charAt(check)) != -1) {
                 char av = test.charAt(check);
                 String ubbi = "ub" + av;
-                System.out.println(ubbi);
                 translated = translated + ubbi;
             }
 
         }
 
-        System.out.println("Your translated word is: " + translated);
+        // State the translated word
+        System.out.println("Your translated word or sequence is: " + translated);
     }
 }
