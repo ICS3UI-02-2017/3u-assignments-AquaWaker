@@ -22,50 +22,69 @@ public class UbbiDubbi {
         Scanner input = new Scanner(System.in);
 
         System.out.println("Input the text to translate to Ubbi Dubbi");
-        String test = input.nextLine();
+        String gather = input.nextLine();
 
         // sanitize the input
-        test = test.toLowerCase();
+        gather = gather.toLowerCase();
+        String test = gather + " ";
 
         //get the length of the string
         int length = test.length();
-        
-        // Checks for vowels and adds ub in front of them
-        for (int vowelCheck = 0; vowelCheck <= length; vowelCheck++) {
 
+
+        // Checks for vowels and adds ub in front of them
+        for (int vowelCheck = 0; vowelCheck < length; vowelCheck++) {
+            System.out.println("vowel: " +vowelCheck);
             if (test.charAt(vowelCheck) == 'u') {
+                length = length + 2;
                 if (test.charAt(vowelCheck + 1) != 'e' && test.charAt(vowelCheck + 1) != 'a' && test.charAt(vowelCheck + 1) != 'i' && test.charAt(vowelCheck + 1) != 'o' && test.charAt(vowelCheck + 1) != 'u') {
-                    test = test.replace("u", "ubu");
-                    length = test.length();
+                    test = test.replaceFirst("u", "ubu");
                     vowelCheck = vowelCheck + 2;
+                } else if (test.charAt(vowelCheck + 1) == 'e' || test.charAt(vowelCheck + 1) == 'a' || test.charAt(vowelCheck + 1) == 'i' || test.charAt(vowelCheck + 1) == 'o' || test.charAt(vowelCheck + 1) == 'u'){
+                    test = test.replaceFirst("u", "ubu");
+                    vowelCheck = vowelCheck + 3;
                 }
             } else if (test.charAt(vowelCheck) == 'e') {
+                length = length + 2;
                 if (test.charAt(vowelCheck + 1) != 'e' && test.charAt(vowelCheck + 1) != 'a' && test.charAt(vowelCheck + 1) != 'i' && test.charAt(vowelCheck + 1) != 'o' && test.charAt(vowelCheck + 1) != 'u') {
-                    test = test.replace("e", "ube");
-                    length = test.length();
+                    test = test.replaceFirst("e", "ube");
                     vowelCheck = vowelCheck + 2;
+                } else if (test.charAt(vowelCheck + 1) == 'e' || test.charAt(vowelCheck + 1) == 'a' || test.charAt(vowelCheck + 1) == 'i' || test.charAt(vowelCheck + 1) == 'o' || test.charAt(vowelCheck + 1) == 'u'){
+                    test = test.replaceFirst("e", "ube");
+                    vowelCheck = vowelCheck + 3;
                 }
             } else if (test.charAt(vowelCheck) == 'a') {
+                length = length + 2;
                 if (test.charAt(vowelCheck + 1) != 'e' && test.charAt(vowelCheck + 1) != 'a' && test.charAt(vowelCheck + 1) != 'i' && test.charAt(vowelCheck + 1) != 'o' && test.charAt(vowelCheck + 1) != 'u') {
-                    test = test.replace("a", "uba");
-                    length = test.length();
+                    test = test.replaceFirst("a", "uba");
                     vowelCheck = vowelCheck + 2;
+                } else if (test.charAt(vowelCheck + 1) == 'e' || test.charAt(vowelCheck + 1) == 'a' || test.charAt(vowelCheck + 1) == 'i' || test.charAt(vowelCheck + 1) == 'o' || test.charAt(vowelCheck + 1) == 'u'){
+                    test = test.replaceFirst("a", "uba");
+                    vowelCheck = vowelCheck + 3;
                 }
             } else if (test.charAt(vowelCheck) == 'i') {
+                length = length + 2;
                 if (test.charAt(vowelCheck + 1) != 'e' && test.charAt(vowelCheck + 1) != 'a' && test.charAt(vowelCheck + 1) != 'i' && test.charAt(vowelCheck + 1) != 'o' && test.charAt(vowelCheck + 1) != 'u') {
-                    test = test.replace("i", "ubi");
-                    length = test.length();
+                    test = test.replaceFirst("i", "ubi");
                     vowelCheck = vowelCheck + 2;
+                } else if (test.charAt(vowelCheck + 1) == 'e' || test.charAt(vowelCheck + 1) == 'a' || test.charAt(vowelCheck + 1) == 'i' || test.charAt(vowelCheck + 1) == 'o' || test.charAt(vowelCheck + 1) == 'u'){
+                    test = test.replaceFirst("i", "ubi");
+                    vowelCheck = vowelCheck + 3;
                 }
             } else if (test.charAt(vowelCheck) == 'o') {
+               
+                length = length + 2;
                 if (test.charAt(vowelCheck + 1) != 'e' && test.charAt(vowelCheck + 1) != 'a' && test.charAt(vowelCheck + 1) != 'i' && test.charAt(vowelCheck + 1) != 'o' && test.charAt(vowelCheck + 1) != 'u') {
-                    test = test.replace("o", "ubo");
-                    length = test.length();
+                    test = test.replaceFirst("o", "ubo");
                     vowelCheck = vowelCheck + 2;
+                } else if (test.charAt(vowelCheck + 1) == 'e' || test.charAt(vowelCheck + 1) == 'a' || test.charAt(vowelCheck + 1) == 'i' || test.charAt(vowelCheck + 1) == 'o' || test.charAt(vowelCheck + 1) == 'u'){
+                    test = test.replaceFirst("o", "ubo");
+                    vowelCheck = vowelCheck + 3;
+                    
                 }
 
             }
-
+            
         }
 
         System.out.print("Your translation into Ubbi Dubbi is: ");
