@@ -45,12 +45,17 @@ public class A6Q6 {
                 }
             }
         }
-        
-        
+
+        // Find the class average
+        double average = 0;
+        for (int add = 0; add < handedIn; add++) {
+            average = average + integers[add];
+        }
+        average = average / handedIn;
+
         // State the highest, the lowest, and the average mark
-        System.out.println("The highest mark is " + integers[integers.length - 1] + "% /n" 
-                + "The highest mark is " + integers[0] + "% /n"
-                + "The average mark is ");
+        System.out.println("The highest mark is " + integers[integers.length - 1] + "% \n"
+                + "The lowest mark is " + integers[0] + "% \n"
+                + "The average mark is " + average + "%");
     }
 }
-
