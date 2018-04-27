@@ -34,9 +34,11 @@ public class A7Q2 {
 
 
         if (grade != 'i') {
-            System.out.println("The mark received would be " + grade);
+            System.out.println("The mark received would be " + grade
+                    + "\n------------------------------------------------------");
         } else {
-            System.out.println("The mark entered is invald");
+            System.out.println("The mark entered is invald"
+                    + "\n------------------------------------------------------");
         }
     }
 

@@ -42,7 +42,8 @@ public class A7Q1 {
             double answer = circleArea(radius);
 
             // display answer
-            System.out.println("The area is " + answer);
+            System.out.println("The area is " + answer
+                    + "\n------------------------------------------------------");
         }
 
     }
