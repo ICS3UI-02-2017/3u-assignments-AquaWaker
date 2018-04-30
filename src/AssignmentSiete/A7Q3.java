@@ -26,7 +26,7 @@ public class A7Q3 {
         for (int display = 0; display < integer; display++) {
             if (allFactors[display] != 0) {
                 System.out.print(allFactors[display] + ", ");
-            } 
+            }
         }
         System.out.println("\n------------------------------------------------------");
     }
@@ -39,9 +39,9 @@ public class A7Q3 {
         // allows the code to be tested indefinitely 
         while (true) {
             System.out.println("Enter a number:");
-            
+
             int number = input.nextInt();
-            
+
             factors(number);
         }
 
