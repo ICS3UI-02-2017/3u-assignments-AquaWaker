@@ -38,11 +38,13 @@ public class face extends JComponent implements ActionListener {
     Timer gameTimer;
 
     // YOUR GAME VARIABLES WOULD GO HERE
-    int[] hairX = {180, 320, 300, 200};
+    int[] hairX = {180, 320, 290, 210};
     int[] hairY = {150, 150, 275, 275};
     
     Color Brown = new Color(122, 58, 6);
     Color Peach = new Color(252, 200, 159);
+    Color toneHighlight = new Color(239, 165, 107);
+    Color mustache = new Color(61, 28, 3);
     
     int[] faceX = {190, 310, 280, 220};
     int[] faceY = {150, 150, 310, 310};
@@ -89,16 +91,65 @@ public class face extends JComponent implements ActionListener {
         g.clearRect(0, 0, WIDTH, HEIGHT);
 
         // GAME DRAWING GOES HERE
+        
+        // back hat
         g.setColor(Color.GREEN);
         g.fillOval(165, 125, 170, 75);
         
         g.setColor(Brown);
         g.fillPolygon(hairX, hairY, 4);
 	
+        // face
         g.setColor(Peach);
         g.fillPolygon(faceX, faceY, 4);
 	
         g.fillArc(220, 270, 60, 60, 180, 180);
+        
+        // hat
+        g.setColor(Color.green);
+        g.fillArc(161, 75, 175, 125, 320, 260);
+        
+        g.setColor(Color.white);
+        g.fillOval(224, 90, 50, 50);
+        
+        g.setColor(Color.green);
+        g.fillRect(237, 100, 10, 30);
+        g.fillRect(237, 120, 25, 10);
+        
+        // eye brows
+        g.setColor(mustache);
+        g.fillOval(207, 150, 35, 20);
+        g.fillOval(257, 150, 35, 20);
+        
+        g.setColor(Peach);
+        g.fillOval(207, 160, 35, 20);
+        g.fillOval(257, 160, 35, 20);
+        
+        // eyes
+        g.setColor(Color.white);
+        g.fillOval(217, 165, 25, 50);
+        g.fillOval(257, 165, 25, 50);
+        
+        g.setColor(Color.CYAN);
+        g.fillOval(225, 175, 18, 35);
+        g.fillOval(258, 175, 18, 35);
+        
+        g.setColor(Color.BLACK);
+        g.fillOval(230, 180, 12, 30);
+        g.fillOval(259, 180, 12, 30);
+        
+        // mustache
+        g.setColor(mustache);
+        g.fillArc(190, 210, 80, 60, 135, 200);
+        g.fillArc(230, 210, 80, 60, 215, 190);
+        
+        // nose
+        g.setColor(Peach);
+        g.fillOval(220, 200, 60, 60);
+        g.setColor(toneHighlight);
+        g.drawOval(220, 200, 60, 60);
+        
+        
         // GAME DRAWING ENDS HERE
     }
 
