@@ -1,5 +1,6 @@
 package AssignmentOcho;
 
+import java.awt.BasicStroke;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import javax.swing.JComponent;
@@ -12,6 +13,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 import java.awt.Color;
+import java.awt.Graphics2D;
 import javax.swing.Timer;
 
 /**
@@ -38,16 +40,30 @@ public class face extends JComponent implements ActionListener {
     Timer gameTimer;
 
     // YOUR GAME VARIABLES WOULD GO HERE
-    int[] hairX = {180, 320, 290, 210};
-    int[] hairY = {150, 150, 275, 275};
+    int[] hairX = {180, 320, 295, 205};
+    int[] hairY = {150, 150, 255, 255};
     
     Color Brown = new Color(122, 58, 6);
     Color Peach = new Color(252, 200, 159);
     Color toneHighlight = new Color(239, 165, 107);
     Color mustache = new Color(61, 28, 3);
+    Color trueGreen = new Color(82, 175, 68);
     
-    int[] faceX = {190, 310, 280, 220};
-    int[] faceY = {150, 150, 310, 310};
+    int[] faceX = {190, 310, 285, 215};
+    int[] faceY = {150, 150, 280, 280};
+    
+    BasicStroke biggerLine = new BasicStroke(5);
+    BasicStroke bigishLine = new BasicStroke(3);
+    BasicStroke normal = new BasicStroke();
+    
+    int eyeBrowY = 150;
+    int eyebrowChange = 1;
+    
+    int mustacheL = 135;
+    int mustacheEh = 200;
+    int mustacheR = 190;
+    int mustacheUgh = 215;
+    int mustacheChange = 1;
     
     // GAME VARIABLES END HERE    
 
@@ -87,43 +103,52 @@ public class face extends JComponent implements ActionListener {
     // NOTE: This is already double buffered!(helps with framerate/speed)
     @Override
     public void paintComponent(Graphics g) {
+        Graphics2D g2d = (Graphics2D)g;
+        
         // always clear the screen first!
         g.clearRect(0, 0, WIDTH, HEIGHT);
 
         // GAME DRAWING GOES HERE
         
         // back hat
-        g.setColor(Color.GREEN);
+        g2d.setStroke(biggerLine);
+        g.setColor(Color.BLACK);
+        g.drawOval(165, 125, 170, 75);
+        
+        g.setColor(trueGreen);
         g.fillOval(165, 125, 170, 75);
         
+        // hair
         g.setColor(Brown);
         g.fillPolygon(hairX, hairY, 4);
+        g.fillOval(270, 285, 15, 15);
+        g.fillOval(215, 285, 15, 15);
 	
         // face
         g.setColor(Peach);
         g.fillPolygon(faceX, faceY, 4);
 	
-        g.fillArc(220, 270, 60, 60, 180, 180);
+        g.fillArc(215, 250, 70, 60, 180, 180);
         
         // hat
-        g.setColor(Color.green);
-        g.fillArc(161, 75, 175, 125, 320, 260);
+        g.setColor(trueGreen);
+        g.fillArc(161, 75, 178, 125, 320, 260);
         
         g.setColor(Color.white);
         g.fillOval(224, 90, 50, 50);
         
-        g.setColor(Color.green);
+        g.setColor(trueGreen);
         g.fillRect(237, 100, 10, 30);
         g.fillRect(237, 120, 25, 10);
         
         // eye brows
         g.setColor(mustache);
-        g.fillOval(207, 150, 35, 20);
-        g.fillOval(257, 150, 35, 20);
+        g.fillOval(207, eyeBrowY, 35, 20);
+        g.fillOval(257, eyeBrowY, 35, 20);
         
         g.setColor(Peach);
-        g.fillOval(207, 160, 35, 20);
-        g.fillOval(257, 160, 35, 20);
+        g.fillOval(207, (eyeBrowY+10), 35, 20);
+        g.fillOval(257, (eyeBrowY+10), 35, 20);
         
         // eyes
         g.setColor(Color.white);
@@ -140,14 +165,20 @@ public class face extends JComponent implements ActionListener {
         
         // mustache
         g.setColor(mustache);
-        g.fillArc(190, 210, 80, 60, 135, 200);
-        g.fillArc(230, 210, 80, 60, 215, 190);
+        g.fillArc(190, 210, 80, 60, mustacheL, mustacheEh);
+        g.fillArc(230, 210, 80, 60, mustacheUgh, mustacheR);
         
         // nose
+        g2d.setStroke(normal);
         g.setColor(Peach);
         g.fillOval(220, 200, 60, 60);
         g.setColor(toneHighlight);
         g.drawOval(220, 200, 60, 60);
+        
+        // smile
+        g2d.setStroke(bigishLine);
+        g.setColor(Color.BLACK);
+        g.drawArc(230, 265, 40, 15, 190, 160);
         
         
         // GAME DRAWING ENDS HERE
@@ -163,6 +194,21 @@ public class face extends JComponent implements ActionListener {
     // The main game loop
     // In here is where all the logic for my game will go
     public void gameLoop() {
+        
+        if (eyeBrowY == 145) {
+            eyebrowChange = 1;
+        } else if (eyeBrowY == 155) {
+            eyebrowChange = -1;
+        }
+        
+        if (mustacheL == 135){
+            
+        }
+        
+        eyeBrowY = eyeBrowY + eyebrowChange;
+            
+        
+        
         
     }
 

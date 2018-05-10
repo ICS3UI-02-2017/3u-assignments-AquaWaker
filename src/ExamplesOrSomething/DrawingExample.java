@@ -92,10 +92,10 @@ public class DrawingExample extends JComponent implements ActionListener {
         g.setColor(Color.BLACK);
         g.fillRect(0, (HEIGHT-75), WIDTH, 75);
 	
-        g.fillOval(150, 375, 50, 50);
-        g.drawLine(175, 425, 175, 475);
-        g.drawLine(175, 475, 165, 525);
-        g.drawLine(175, 475, 225, 455);
+        g.fillOval(200, 375, 50, 50);
+        g.drawLine(225, 425, 225, 475);
+        g.drawLine(225, 475, 215, 525);
+        g.drawLine(225, 475, 275, 455);
 	
         int[] triangleX = {500, 600, 450};
         int[] triangleY = {400, 525, 525};
