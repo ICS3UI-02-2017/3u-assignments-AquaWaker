@@ -202,13 +202,16 @@ public class face extends JComponent implements ActionListener {
         }
         
         if (mustacheL == 135){
-            
+            mustacheChange = 1;
+        } else if(mustacheL == 160) {
+            mustacheChange = - 1;
         }
         
         eyeBrowY = eyeBrowY + eyebrowChange;
-            
         
-        
+        mustacheL = mustacheL + mustacheChange;
+        mustacheEh = mustacheEh - mustacheChange;
+        mustacheR = mustacheR - mustacheChange;
         
     }
 
