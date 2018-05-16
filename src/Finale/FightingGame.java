@@ -43,8 +43,17 @@ public class FightingGame extends JComponent implements ActionListener {
     boolean moveLP1 = false;
     boolean moveRP1 = false;
     
-    double segLength = 80;
-    double x, y, x2, y2;
+    int mouseX = 0;
+    int mouseY = 0;
+    
+    double segLength = 60;
+    double x, y, startAX = 150, startAY = 300;
+    double x2 = 150, y2 = 300; 
+    double[] leftArm = new double[6];
+    leftArm[0] = 0;
+    leftArm[1] = 0;
+    
+    
     
     // GAME VARIABLES END HERE    
 
@@ -94,23 +103,27 @@ public class FightingGame extends JComponent implements ActionListener {
 
         g.fillRect(0, 525, WIDTH, 75);
 
+        limbMath(g2d, x, y, startAX, startAY, mouseX, mouseY);
         
-        double dx = 150 - x;
-        double dy = 300 - y;
-        double angle1 = Math.atan2(dy, dx);  
-  
-        double tx = 150 - Math.cos(angle1) * segLength;
-        double ty = 300 - Math.sin(angle1) * segLength;
+        System.out.println("---WORKING---");
+        double dx = mouseX - x;
+        double dy = mouseY - y;
+        double angle1 = Math.atan2(dy, dx);
+        System.out.printf("DX: %f  DY: %f  angle1: %f \n", dx, dy, angle1);
+        
+        double tx = mouseX - Math.cos(angle1) * segLength;
+        double ty = mouseY - Math.sin(angle1) * segLength;
+        System.out.printf("TX: %f  TY: %f \n", tx, ty);
         dx = tx - x2;
         dy = ty - y2;
         double angle2 = Math.atan2(dy, dx);  
+        System.out.printf("DX: %f  DY: %f  angle2: %f \n", dx, dy, angle2);
         x = x2 + Math.cos(angle2) * segLength;
         y = y2 + Math.sin(angle2) * segLength;
+        System.out.printf("X: %f  Y: %f  \n", x, y);
   
         segment(g2d,x, y, angle1); 
-        segment(g2d,x2, y2, angle2); 
-        
-        
+        segment(g2d,x2, y2, angle2);
         
         // head
         g.fillOval(100, 200, 100, 100);
@@ -136,6 +149,31 @@ public class FightingGame extends JComponent implements ActionListener {
         // GAME DRAWING ENDS HERE
     }
 
+    // determines the angle
+    void limbMath(Graphics2D g2d, double x, double y, double x2, double y2, double x3, double y3){
+        
+        System.out.println("---NOT WORKING");
+        
+        
+        double dx = x3 - x;
+        double dy = y3 - y;
+        double angle1 = Math.atan2(dy, dx);  
+        System.out.printf("DX: %f  DY: %f  angle1: %f \n", dx, dy, angle1);
+        double tx = x3 - Math.cos(angle1) * segLength;
+        double ty = y3 - Math.sin(angle1) * segLength;
+        System.out.printf("TX: %f  TY: %f \n", tx, ty);
+        dx = tx - x2;
+        dy = ty - y2;
+        double angle2 = Math.atan2(dy, dx);  
+        System.out.printf("DX: %f  DY: %f  angle2: %f \n", dx, dy, angle2);
+        this.x = x2 + Math.cos(angle2) * segLength;
+        this.y = y2 + Math.sin(angle2) * segLength;
+        System.out.printf("X: %f  Y: %f  \n", x, y);
+        
+        segment(g2d,x, y, angle1); 
+        segment(g2d,x2, y2, angle2);
+    }
+    
     void segment(Graphics2D g, double x, double y, double a) {
 
         g.translate(x, y);
@@ -178,8 +216,8 @@ public class FightingGame extends JComponent implements ActionListener {
         // if the mouse has moved positions
         @Override
         public void mouseMoved(MouseEvent e) {
-            int mouseX = e.getX();
-            int mouseY = e.getY();
+            mouseX = e.getX();
+            mouseY = e.getY();
         }
     }
 
