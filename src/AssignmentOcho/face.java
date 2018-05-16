@@ -195,18 +195,21 @@ public class face extends JComponent implements ActionListener {
     // In here is where all the logic for my game will go
     public void gameLoop() {
         
+        // eyebrows move up and down
         if (eyeBrowY == 145) {
             eyebrowChange = 1;
         } else if (eyeBrowY == 155) {
             eyebrowChange = -1;
         }
         
+        // mustache rotates a bit
         if (mustacheL == 135){
             mustacheChange = 1;
         } else if(mustacheL == 160) {
             mustacheChange = - 1;
         }
         
+        // the code that actually makes it move
         eyeBrowY = eyeBrowY + eyebrowChange;
         
         mustacheL = mustacheL + mustacheChange;
