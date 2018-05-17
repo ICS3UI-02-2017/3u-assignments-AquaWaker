@@ -46,13 +46,16 @@ public class FightingGame extends JComponent implements ActionListener {
     int mouseX = 0;
     int mouseY = 0;
     
-    double segLength = 60;
     double x, y, startAX = 150, startAY = 300;
     double x2 = 150, y2 = 300; 
-    double[] leftArm = new double[6];
-    leftArm[0] = 0;
-    leftArm[1] = 0;
+    double[] leftArm = new double[7];
+    double[] leftLeg = new double[7];
+    double[] rightLeg = new double[7];
+    double[] rightArm = new double[7];
     
+    int distance = 0;
+    
+    int move = 1;
     
     
     // GAME VARIABLES END HERE    
@@ -81,7 +84,7 @@ public class FightingGame extends JComponent implements ActionListener {
         this.addMouseMotionListener(m);
         this.addMouseWheelListener(m);
         this.addMouseListener(m);
-
+        preSetup();
         gameTimer = new Timer(desiredTime, this);
         gameTimer.setRepeats(true);
         gameTimer.start();
@@ -103,27 +106,10 @@ public class FightingGame extends JComponent implements ActionListener {
 
         g.fillRect(0, 525, WIDTH, 75);
 
-        limbMath(g2d, x, y, startAX, startAY, mouseX, mouseY);
-        
-        System.out.println("---WORKING---");
-        double dx = mouseX - x;
-        double dy = mouseY - y;
-        double angle1 = Math.atan2(dy, dx);
-        System.out.printf("DX: %f  DY: %f  angle1: %f \n", dx, dy, angle1);
-        
-        double tx = mouseX - Math.cos(angle1) * segLength;
-        double ty = mouseY - Math.sin(angle1) * segLength;
-        System.out.printf("TX: %f  TY: %f \n", tx, ty);
-        dx = tx - x2;
-        dy = ty - y2;
-        double angle2 = Math.atan2(dy, dx);  
-        System.out.printf("DX: %f  DY: %f  angle2: %f \n", dx, dy, angle2);
-        x = x2 + Math.cos(angle2) * segLength;
-        y = y2 + Math.sin(angle2) * segLength;
-        System.out.printf("X: %f  Y: %f  \n", x, y);
-  
-        segment(g2d,x, y, angle1); 
-        segment(g2d,x2, y2, angle2);
+        limbMath(g2d, leftArm);
+        limbMath(g2d, rightArm);
+        limbMath(g2d, leftLeg);
+        limbMath(g2d, rightLeg);
         
         // head
         g.fillOval(100, 200, 100, 100);
@@ -131,11 +117,9 @@ public class FightingGame extends JComponent implements ActionListener {
         // body
         g.drawLine(150, 300, 150, 400);
 
-        // right leg
-        g.drawLine(150, 400, 165, 430);
+        
 
-        // left leg
-        g.drawLine(150, 400, 145, 430);
+        
 
 //        // right arm
 //        g.drawLine(150, 300, 175, 375);
@@ -150,35 +134,34 @@ public class FightingGame extends JComponent implements ActionListener {
     }
 
     // determines the angle
-    void limbMath(Graphics2D g2d, double x, double y, double x2, double y2, double x3, double y3){
+    void limbMath(Graphics2D g2d, double[] limb){
         
-        System.out.println("---NOT WORKING");
+        //System.out.println("---NOT WORKING");
         
-        
-        double dx = x3 - x;
-        double dy = y3 - y;
+        double dx = limb[4] - limb[0];
+        double dy = limb[5] - limb[1];
         double angle1 = Math.atan2(dy, dx);  
-        System.out.printf("DX: %f  DY: %f  angle1: %f \n", dx, dy, angle1);
-        double tx = x3 - Math.cos(angle1) * segLength;
-        double ty = y3 - Math.sin(angle1) * segLength;
-        System.out.printf("TX: %f  TY: %f \n", tx, ty);
-        dx = tx - x2;
-        dy = ty - y2;
+        //System.out.printf("DX: %f  DY: %f  angle1: %f \n", dx, dy, angle1);
+        double tx = limb[4] - Math.cos(angle1) * limb[6];
+        double ty = limb[5] - Math.sin(angle1) * limb[6];
+        //System.out.printf("TX: %f  TY: %f \n", tx, ty);
+        dx = tx - limb[2];
+        dy = ty - limb[3];
         double angle2 = Math.atan2(dy, dx);  
-        System.out.printf("DX: %f  DY: %f  angle2: %f \n", dx, dy, angle2);
-        this.x = x2 + Math.cos(angle2) * segLength;
-        this.y = y2 + Math.sin(angle2) * segLength;
-        System.out.printf("X: %f  Y: %f  \n", x, y);
+        //;System.out.printf("DX: %f  DY: %f  angle2: %f \n", dx, dy, angle2);
+        limb[0] = limb[2] + Math.cos(angle2) * limb[6];
+        limb[1] = limb[3] + Math.sin(angle2) * limb[6];
+        //System.out.printf("X: %f  Y: %f  \n", x, y);
         
-        segment(g2d,x, y, angle1); 
-        segment(g2d,x2, y2, angle2);
+        segment(g2d,limb[0], limb[1], angle1, limb[6]); 
+        segment(g2d,limb[2], limb[3], angle2, limb[6]);
     }
     
-    void segment(Graphics2D g, double x, double y, double a) {
+    void segment(Graphics2D g, double x, double y, double a, double seglength) {
 
         g.translate(x, y);
         g.rotate(a);
-        g.drawLine(0, 0, (int) segLength, 0);
+        g.drawLine(0, 0, (int)seglength, 0);
         g.rotate(-a);
         g.translate(-x, -y);
 
@@ -188,11 +171,54 @@ public class FightingGame extends JComponent implements ActionListener {
     // This is run before the game loop begins!
     public void preSetup() {
         // Any of your pre setup before the loop starts should go here
+        leftArm[0] = 0;
+        leftArm[1] = 0;
+        leftArm[2] = 150;
+        leftArm[3] = 300;
+        leftArm[4] = mouseX;
+        leftArm[5] = mouseY;
+        leftArm[6] = 60;
+        
+        rightArm[0] = 0;
+        rightArm[1] = 0;
+        rightArm[2] = 150;
+        rightArm[3] = 300;
+        rightArm[4] = mouseX;
+        rightArm[5] = mouseY;
+        rightArm[6] = 60;
+        
+        leftLeg[0] = 0;
+        leftLeg[1] = 0;
+        leftLeg[2] = 150;
+        leftLeg[3] = 400;
+        leftLeg[4] = 125;
+        leftLeg[5] = 525;
+        leftLeg[6] = 62.5;
+        
+        rightLeg[0] = 0;
+        rightLeg[1] = 0;
+        rightLeg[2] = 150;
+        rightLeg[3] = 400;
+        rightLeg[4] = 175;
+        rightLeg[5] = 525;
+        rightLeg[6] = 62.5;
     }
 
     // The main game loop
     // In here is where all the logic for my game will go
     public void gameLoop() {
+        
+        leftArm[4] = mouseX;
+        leftArm[5] = mouseY;
+        
+        rightArm[4] = mouseX - 2*distance;
+        rightArm[5] = mouseY;
+        
+//        rightLeg[4] = mouseX;
+//        rightLeg[5] = mouseY;
+        
+        distance = mouseX - 150;
+        
     }
 
     // Used to implement any of the Mouse Actions
@@ -247,17 +273,18 @@ public class FightingGame extends JComponent implements ActionListener {
 
             // which key is being pressed
 
-            if (keyCode == KeyEvent.VK_W) {
-            } else if (keyCode == KeyEvent.VK_A) {
-            } else if (keyCode == KeyEvent.VK_S) {
+            
+            if (keyCode == KeyEvent.VK_A) {
+                moveLP1 = false;
             } else if (keyCode == KeyEvent.VK_D) {
+                moveRP1 = false;
             }
         }
     }
 
     @Override
     public void actionPerformed(ActionEvent ae) {
-        preSetup();
+        
         gameLoop();
         repaint();
     }
