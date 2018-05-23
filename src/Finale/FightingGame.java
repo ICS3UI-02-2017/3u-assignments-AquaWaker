@@ -46,16 +46,24 @@ public class FightingGame extends JComponent implements ActionListener {
     int mouseX = 0;
     int mouseY = 0;
     
-    double x, y, startAX = 150, startAY = 300;
-    double x2 = 150, y2 = 300; 
+//    double x, y, startAX = 150, startAY = 300;
+//    double x2 = 150, y2 = 300; 
     double[] leftArm = new double[7];
     double[] leftLeg = new double[7];
     double[] rightLeg = new double[7];
     double[] rightArm = new double[7];
     
+    double[] leftArmP2 = new double[7];
+    double[] leftLegP2 = new double[7];
+    double[] rightLegP2 = new double[7];
+    double[] rightArmP2 = new double[7];
+    
+    int move = 0;
+    
     int distance = 0;
     
-    int move = 1;
+    int position = 150;
+    
     
     
     // GAME VARIABLES END HERE    
@@ -112,12 +120,10 @@ public class FightingGame extends JComponent implements ActionListener {
         limbMath(g2d, rightLeg);
         
         // head
-        g.fillOval(100, 200, 100, 100);
+        g.fillOval(position - 50, 200, 100, 100);
 
         // body
-        g.drawLine(150, 300, 150, 400);
-
-        
+        g.drawLine(position, 300, position, 400);
 
         
 
@@ -173,7 +179,7 @@ public class FightingGame extends JComponent implements ActionListener {
         // Any of your pre setup before the loop starts should go here
         leftArm[0] = 0;
         leftArm[1] = 0;
-        leftArm[2] = 150;
+//        leftArm[2] = position;
         leftArm[3] = 300;
         leftArm[4] = mouseX;
         leftArm[5] = mouseY;
@@ -181,7 +187,7 @@ public class FightingGame extends JComponent implements ActionListener {
         
         rightArm[0] = 0;
         rightArm[1] = 0;
-        rightArm[2] = 150;
+//        rightArm[2] = position;
         rightArm[3] = 300;
         rightArm[4] = mouseX;
         rightArm[5] = mouseY;
@@ -189,17 +195,17 @@ public class FightingGame extends JComponent implements ActionListener {
         
         leftLeg[0] = 0;
         leftLeg[1] = 0;
-        leftLeg[2] = 150;
+//        leftLeg[2] = position;
         leftLeg[3] = 400;
-        leftLeg[4] = 125;
+//        leftLeg[4] = position - 25;
         leftLeg[5] = 525;
         leftLeg[6] = 62.5;
         
         rightLeg[0] = 0;
         rightLeg[1] = 0;
-        rightLeg[2] = 150;
+//        rightLeg[2] = position;
         rightLeg[3] = 400;
-        rightLeg[4] = 175;
+//        rightLeg[4] = position + 25;
         rightLeg[5] = 525;
         rightLeg[6] = 62.5;
     }
@@ -207,6 +213,13 @@ public class FightingGame extends JComponent implements ActionListener {
     // The main game loop
     // In here is where all the logic for my game will go
     public void gameLoop() {
+   
+        leftArm[2] = position;
+        rightArm[2] = position;
+        leftLeg[2] = position;
+        leftLeg[4] = position - 25;
+        rightLeg[2] = position;
+        rightLeg[4] = position + 25;
         
         leftArm[4] = mouseX;
         leftArm[5] = mouseY;
@@ -214,10 +227,17 @@ public class FightingGame extends JComponent implements ActionListener {
         rightArm[4] = mouseX - 2*distance;
         rightArm[5] = mouseY;
         
-//        rightLeg[4] = mouseX;
-//        rightLeg[5] = mouseY;
+        rightLeg[4] = mouseX;
+        rightLeg[5] = mouseY;
         
         distance = mouseX - 150;
+        
+        if(moveLP1 == true){
+            position = position - 5;
+        }else if(moveRP1 == true){
+            position = position + 5;
+        }
+            
         
     }
 
@@ -258,11 +278,27 @@ public class FightingGame extends JComponent implements ActionListener {
 
             // which key is being pressed
 
+            // move left
             if (keyCode == KeyEvent.VK_A) {
                 moveLP1 = true;
+            // move right
             } else if (keyCode == KeyEvent.VK_D) {
                 moveRP1 = true;
-            }
+            
+            // move left arm up
+            } else if (keyCode == KeyEvent.VK_T) {
+                moveRP1 = true;
+            
+            // move left arm down
+            } else if (keyCode == KeyEvent.VK_G) {
+                moveRP1 = true;
+            
+            //
+            } else if (keyCode == KeyEvent.VK_D) {
+                moveRP1 = true;
+            } 
+            
+            
         }
 
         // if a key has been released
