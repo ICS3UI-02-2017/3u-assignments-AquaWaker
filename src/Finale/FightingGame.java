@@ -39,35 +39,34 @@ public class FightingGame extends JComponent implements ActionListener {
     BasicStroke biggerLine = new BasicStroke(5);
     BasicStroke bigishLine = new BasicStroke(3);
     BasicStroke normal = new BasicStroke();
-    
     boolean moveLP1 = false;
     boolean moveRP1 = false;
-    
     int mouseX = 0;
     int mouseY = 0;
-    
 //    double x, y, startAX = 150, startAY = 300;
 //    double x2 = 150, y2 = 300; 
     double[] leftArm = new double[7];
     double[] leftLeg = new double[7];
     double[] rightLeg = new double[7];
     double[] rightArm = new double[7];
-    
     double[] leftArmP2 = new double[7];
     double[] leftLegP2 = new double[7];
     double[] rightLegP2 = new double[7];
     double[] rightArmP2 = new double[7];
-    
-    int move = 0;
-    
-    int distance = 0;
-    
+    // movement variables
+    int moveLAV = 0;
+    int moveRAV = 0;
+    int moveLAH = 0;
+    int moveRAH = 0;
+    // sets the horizontal starting spot
     int position = 150;
-    
-    
-    
-    // GAME VARIABLES END HERE    
+    // is it punching?
+    boolean leftPunch = false;
+    boolean rightPunch = false;
+    // helps with animation
+    int animationFrame = 0;
 
+    // GAME VARIABLES END HERE    
     // Constructor to create the Frame and place the panel in
     // You will learn more about this in Grade 12 :)
     public FightingGame() {
@@ -118,14 +117,14 @@ public class FightingGame extends JComponent implements ActionListener {
         limbMath(g2d, rightArm);
         limbMath(g2d, leftLeg);
         limbMath(g2d, rightLeg);
-        
+
         // head
         g.fillOval(position - 50, 200, 100, 100);
 
         // body
         g.drawLine(position, 300, position, 400);
 
-        
+
 
 //        // right arm
 //        g.drawLine(150, 300, 175, 375);
@@ -140,34 +139,34 @@ public class FightingGame extends JComponent implements ActionListener {
     }
 
     // determines the angle
-    void limbMath(Graphics2D g2d, double[] limb){
-        
+    void limbMath(Graphics2D g2d, double[] limb) {
+
         //System.out.println("---NOT WORKING");
-        
+
         double dx = limb[4] - limb[0];
         double dy = limb[5] - limb[1];
-        double angle1 = Math.atan2(dy, dx);  
+        double angle1 = Math.atan2(dy, dx);
         //System.out.printf("DX: %f  DY: %f  angle1: %f \n", dx, dy, angle1);
         double tx = limb[4] - Math.cos(angle1) * limb[6];
         double ty = limb[5] - Math.sin(angle1) * limb[6];
         //System.out.printf("TX: %f  TY: %f \n", tx, ty);
         dx = tx - limb[2];
         dy = ty - limb[3];
-        double angle2 = Math.atan2(dy, dx);  
+        double angle2 = Math.atan2(dy, dx);
         //;System.out.printf("DX: %f  DY: %f  angle2: %f \n", dx, dy, angle2);
         limb[0] = limb[2] + Math.cos(angle2) * limb[6];
         limb[1] = limb[3] + Math.sin(angle2) * limb[6];
         //System.out.printf("X: %f  Y: %f  \n", x, y);
-        
-        segment(g2d,limb[0], limb[1], angle1, limb[6]); 
-        segment(g2d,limb[2], limb[3], angle2, limb[6]);
+
+        segment(g2d, limb[0], limb[1], angle1, limb[6]);
+        segment(g2d, limb[2], limb[3], angle2, limb[6]);
     }
-    
+
     void segment(Graphics2D g, double x, double y, double a, double seglength) {
 
         g.translate(x, y);
         g.rotate(a);
-        g.drawLine(0, 0, (int)seglength, 0);
+        g.drawLine(0, 0, (int) seglength, 0);
         g.rotate(-a);
         g.translate(-x, -y);
 
@@ -179,33 +178,23 @@ public class FightingGame extends JComponent implements ActionListener {
         // Any of your pre setup before the loop starts should go here
         leftArm[0] = 0;
         leftArm[1] = 0;
-//        leftArm[2] = position;
         leftArm[3] = 300;
-        leftArm[4] = mouseX;
-        leftArm[5] = mouseY;
         leftArm[6] = 60;
-        
+
         rightArm[0] = 0;
         rightArm[1] = 0;
-//        rightArm[2] = position;
         rightArm[3] = 300;
-        rightArm[4] = mouseX;
-        rightArm[5] = mouseY;
         rightArm[6] = 60;
-        
+
         leftLeg[0] = 0;
         leftLeg[1] = 0;
-//        leftLeg[2] = position;
         leftLeg[3] = 400;
-//        leftLeg[4] = position - 25;
         leftLeg[5] = 525;
         leftLeg[6] = 62.5;
-        
+
         rightLeg[0] = 0;
         rightLeg[1] = 0;
-//        rightLeg[2] = position;
         rightLeg[3] = 400;
-//        rightLeg[4] = position + 25;
         rightLeg[5] = 525;
         rightLeg[6] = 62.5;
     }
@@ -213,32 +202,67 @@ public class FightingGame extends JComponent implements ActionListener {
     // The main game loop
     // In here is where all the logic for my game will go
     public void gameLoop() {
-   
+
         leftArm[2] = position;
         rightArm[2] = position;
         leftLeg[2] = position;
         leftLeg[4] = position - 25;
         rightLeg[2] = position;
         rightLeg[4] = position + 25;
-        
-        leftArm[4] = mouseX;
-        leftArm[5] = mouseY;
-        
-        rightArm[4] = mouseX - 2*distance;
-        rightArm[5] = mouseY;
-        
-        rightLeg[4] = mouseX;
-        rightLeg[5] = mouseY;
-        
-        distance = mouseX - 150;
-        
-        if(moveLP1 == true){
+
+        leftArm[4] = (position - 25) + moveLAH;
+        leftArm[5] = 400 + moveLAV;
+
+        rightArm[4] = (position + 25) + moveRAH;
+        rightArm[5] = 400 + moveRAV;
+
+
+
+        // allows the figure to move across the area
+        if (moveLP1 == true) {
             position = position - 5;
-        }else if(moveRP1 == true){
+        } else if (moveRP1 == true) {
             position = position + 5;
         }
-            
-        
+
+        // stops the player from going off stage
+        if (position <= 0) {
+            position = 0;
+        } else if (position >= WIDTH) {
+            position = WIDTH;
+        }
+
+        // Perform the left punch animation 
+        if (leftPunch == true && animationFrame > 0 && animationFrame < 10) {
+            moveLAV = moveLAV + 10;
+            moveLAH = moveLAH + 2;
+            animationFrame++;
+
+        } else if (animationFrame == 10) {
+            leftPunch = false;
+            moveLAV = moveLAV - 10;
+            moveLAH = moveLAH - 2;
+            animationFrame = 20;
+        } else if (animationFrame > 10 && animationFrame <= 20) {
+            moveLAV = moveLAV - 10;
+            moveLAH = moveLAH - 2;
+            animationFrame--;
+        }
+
+        // Perform the right punch animation 
+        if (rightPunch == true) {
+            // moves the arm forward
+            for (int movement = 0; movement < 10; movement++) {
+                moveRAV = moveRAV + 10;
+                moveRAH = moveRAH + 2;
+            }
+            // moves the arm backwards
+            for (int movement = 0; movement < 10; movement++) {
+                moveRAV = moveRAV - 10;
+                moveRAH = moveRAH - 2;
+            }
+        }
+
     }
 
     // Used to implement any of the Mouse Actions
@@ -281,24 +305,55 @@ public class FightingGame extends JComponent implements ActionListener {
             // move left
             if (keyCode == KeyEvent.VK_A) {
                 moveLP1 = true;
-            // move right
+                // move right
             } else if (keyCode == KeyEvent.VK_D) {
                 moveRP1 = true;
-            
+
+                // do the left punch
+            } else if (keyCode == KeyEvent.VK_Q) {
+                if (animationFrame == 0) {
+                    leftPunch = true;
+                    animationFrame = 1;
+                }
+
+                // do the right punch
+            } else if (keyCode == KeyEvent.VK_E) {
+                rightPunch = true;
+            } // Qwap physics
             // move left arm up
-            } else if (keyCode == KeyEvent.VK_T) {
-                moveRP1 = true;
-            
-            // move left arm down
+            else if (keyCode == KeyEvent.VK_T) {
+                moveLAV = moveLAV - 5;
+
+                // move left arm down
             } else if (keyCode == KeyEvent.VK_G) {
-                moveRP1 = true;
-            
-            //
-            } else if (keyCode == KeyEvent.VK_D) {
-                moveRP1 = true;
-            } 
-            
-            
+                moveLAV = moveLAV + 5;
+
+                // move right arm up
+            } else if (keyCode == KeyEvent.VK_Y) {
+                moveRAV = moveRAV - 5;
+
+                // move right arm down
+            } else if (keyCode == KeyEvent.VK_H) {
+                moveRAV = moveRAV + 5;
+
+                // move left arm left
+            } else if (keyCode == KeyEvent.VK_U) {
+                moveLAH = moveLAH - 5;
+
+                // move left arm right
+            } else if (keyCode == KeyEvent.VK_I) {
+                moveLAH = moveLAH + 5;
+
+                // move right arm left
+            } else if (keyCode == KeyEvent.VK_J) {
+                moveRAH = moveRAH - 5;
+
+                // move right arm right
+            } else if (keyCode == KeyEvent.VK_K) {
+                moveRAH = moveRAH + 5;
+            }
+
+
         }
 
         // if a key has been released
@@ -309,18 +364,28 @@ public class FightingGame extends JComponent implements ActionListener {
 
             // which key is being pressed
 
-            
+
             if (keyCode == KeyEvent.VK_A) {
                 moveLP1 = false;
+
             } else if (keyCode == KeyEvent.VK_D) {
                 moveRP1 = false;
+
+                // do the left punch
+            } else if (keyCode == KeyEvent.VK_Q) {
+                leftPunch = false;
+
+                // do the right punch
+            } else if (keyCode == KeyEvent.VK_E) {
+                rightPunch = false;
             }
+
         }
     }
 
     @Override
     public void actionPerformed(ActionEvent ae) {
-        
+
         gameLoop();
         repaint();
     }
