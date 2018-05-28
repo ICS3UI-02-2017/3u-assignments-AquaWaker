@@ -17,7 +17,7 @@ import java.awt.Graphics2D;
 import javax.swing.Timer;
 
 /**
- *
+ * final project
  * @author pritb9521
  */
 public class FightingGame extends JComponent implements ActionListener {
@@ -143,15 +143,15 @@ public class FightingGame extends JComponent implements ActionListener {
         g.drawLine(position, 300, position, 400);
 
         // draw limbs
-        limbMath(g2d, leftArm);
-        limbMath(g2d, rightArm);
+        //limbMath(g2d, leftArm);
+        //limbMath(g2d, rightArm);
         
         if (opm == true){
             g.setColor(Color.YELLOW);
         } else {
             g.setColor(Color.BLACK);
         }
-        limbMath(g2d, leftLeg);
+        //limbMath(g2d, leftLeg);
         limbMath(g2d, rightLeg);
 
 //        // right arm
@@ -169,35 +169,40 @@ public class FightingGame extends JComponent implements ActionListener {
     // determines the angle
     void limbMath(Graphics2D g2d, double[] limb) {
 
-        //System.out.println("---NOT WORKING");
-
         double dx = limb[4] - limb[0];
         double dy = limb[5] - limb[1];
         double angle1 = Math.atan2(dy, dx);
-        //System.out.printf("DX: %f  DY: %f  angle1: %f \n", dx, dy, angle1);
+        
+        
+        System.out.println(angle1);
+        
         double tx = limb[4] - Math.cos(angle1) * limb[6];
         double ty = limb[5] - Math.sin(angle1) * limb[6];
-        //System.out.printf("TX: %f  TY: %f \n", tx, ty);
+        
         dx = tx - limb[2];
         dy = ty - limb[3];
         double angle2 = Math.atan2(dy, dx);
-        //;System.out.printf("DX: %f  DY: %f  angle2: %f \n", dx, dy, angle2);
+        
         limb[0] = limb[2] + Math.cos(angle2) * limb[6];
         limb[1] = limb[3] + Math.sin(angle2) * limb[6];
-        //System.out.printf("X: %f  Y: %f  \n", x, y);
-
+        
+        // changes the colour of the segments of the limbs
         if (opm == true){
             g2d.setColor(Color.RED);
         } else {
             g2d.setColor(Color.BLACK);
         }
+        // send the information to draw the first segment
         segment(g2d, limb[0], limb[1], angle1, limb[6]);
         
+        // changes the colour of the segments of the limbs
         if (opm == true){
             g2d.setColor(Color.YELLOW);
         } else {
             g2d.setColor(Color.BLACK);
         }
+        
+        // send the information to draw the second segment
         segment(g2d, limb[2], limb[3], angle2, limb[6]);
     }
 
@@ -256,17 +261,6 @@ public class FightingGame extends JComponent implements ActionListener {
         rightArm[5] = 400 + moveRAV;
 
 
-        // starts to avoid the arm wanting to reach a point farther then it can reach
-        if (moveLAH >= 80) {
-            moveLAH = 80;
-        } else if (moveLAV >= 80) {
-            moveLAH = 80;
-        } else if (moveRAH >= 80) {
-            moveLAH = 80;
-        } else if (moveRAV >= 80) {
-            moveLAH = 80;
-        }
-
         // allows the figure to move across the area
         if (moveLP1 == true) {
             position = position - 5;
@@ -284,7 +278,7 @@ public class FightingGame extends JComponent implements ActionListener {
         // Perform the left punch animation 
         // move the arm forward
         if (leftPunch == true && animationFrameL > 0 && animationFrameL < 10) {
-            moveLAV = moveLAV - 3;
+            moveLAV = moveLAV - 6;
             moveLAH = moveLAH + 12;
             animationFrameL++;
             
@@ -294,7 +288,7 @@ public class FightingGame extends JComponent implements ActionListener {
             animationFrameL = 20;
         // move the arm back    
         } else if (animationFrameL > 11 && animationFrameL <= 20) {
-            moveLAV = moveLAV + 3;
+            moveLAV = moveLAV + 6;
             moveLAH = moveLAH - 12;
             animationFrameL--;
             // allow the punch to happen again    
@@ -305,7 +299,7 @@ public class FightingGame extends JComponent implements ActionListener {
         // Perform the right punch animation 
         // move the arm forward
         if (rightPunch == true && animationFrameR > 0 && animationFrameR < 10) {
-            moveRAV = moveRAV - 3;
+            moveRAV = moveRAV - 8;
             moveRAH = moveRAH + 12;
             animationFrameR++;
         // reset the varibles for the thrid part
@@ -314,7 +308,7 @@ public class FightingGame extends JComponent implements ActionListener {
             animationFrameR = 20;
         // move the arm back    
         } else if (animationFrameR > 11 && animationFrameR <= 20) {
-            moveRAV = moveRAV + 3;
+            moveRAV = moveRAV + 8;
             moveRAH = moveRAH - 12;
             animationFrameR--;
 
