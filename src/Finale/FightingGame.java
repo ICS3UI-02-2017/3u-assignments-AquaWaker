@@ -47,14 +47,16 @@ public class FightingGame extends JComponent implements ActionListener {
 //    double x, y, startAX = 150, startAY = 300;
 //    double x2 = 150, y2 = 300; 
     
-    double[] leftArm = new double[7];
-    double[] leftLeg = new double[7];
-    double[] rightLeg = new double[7];
-    double[] rightArm = new double[7];
+    double[] leftArm = new double[8];
+    double[] leftLeg = new double[8];
+    double[] rightLeg = new double[8];
+    double[] rightArm = new double[8];
     double[] leftArmP2 = new double[7];
     double[] leftLegP2 = new double[7];
     double[] rightLegP2 = new double[7];
     double[] rightArmP2 = new double[7];
+    
+    
    
     // movement variables
     int moveLAV = 0;
@@ -173,9 +175,6 @@ public class FightingGame extends JComponent implements ActionListener {
         double dy = limb[5] - limb[1];
         double angle1 = Math.atan2(dy, dx);
         
-        
-        System.out.println(angle1);
-        
         double tx = limb[4] - Math.cos(angle1) * limb[6];
         double ty = limb[5] - Math.sin(angle1) * limb[6];
         
@@ -186,6 +185,14 @@ public class FightingGame extends JComponent implements ActionListener {
         limb[0] = limb[2] + Math.cos(angle2) * limb[6];
         limb[1] = limb[3] + Math.sin(angle2) * limb[6];
         
+        if (angle2 > angle1){
+        angle2 = angle1;
+    }
+//        if (limb[7] == 1){
+            if (limb[0] < limb[2] && limb[0] < limb[4]){
+                limb[0] = limb[2];
+            }
+//        }
         // changes the colour of the segments of the limbs
         if (opm == true){
             g2d.setColor(Color.RED);
@@ -224,23 +231,27 @@ public class FightingGame extends JComponent implements ActionListener {
         leftArm[1] = 0;
         leftArm[3] = 302;
         leftArm[6] = 60;
+        leftArm[7] = 0;
 
         rightArm[0] = 0;
         rightArm[1] = 0;
         rightArm[3] = 302;
         rightArm[6] = 60;
+        rightArm[7] = 0;
 
         leftLeg[0] = 0;
         leftLeg[1] = 0;
         leftLeg[3] = 400;
         leftLeg[5] = 525;
         leftLeg[6] = 62.5;
+        leftLeg[7] = 1;
 
         rightLeg[0] = 0;
         rightLeg[1] = 0;
         rightLeg[3] = 400;
         rightLeg[5] = 525;
         rightLeg[6] = 62.5;
+        rightLeg[7] = 1;
     }
 
     // The main game loop
