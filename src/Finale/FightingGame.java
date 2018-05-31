@@ -14,6 +14,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import javax.swing.Timer;
 
 /**
@@ -44,8 +45,8 @@ public class FightingGame extends JComponent implements ActionListener {
     boolean moveRP1 = false;
     int mouseX = 0;
     int mouseY = 0;
-//    double x, y, startAX = 150, startAY = 300;
-//    double x2 = 150, y2 = 300; 
+    
+    // make the limbs
     double[] leftArm = new double[8];
     double[] leftLeg = new double[8];
     double[] rightLeg = new double[8];
@@ -54,30 +55,44 @@ public class FightingGame extends JComponent implements ActionListener {
     double[] leftLegP2 = new double[8];
     double[] rightLegP2 = new double[8];
     double[] rightArmP2 = new double[8];
+    
     // movement variables
     int moveLAV = 0;
     int moveRAV = 0;
     int moveLAH = 0;
     int moveRAH = 0;
+    
     // sets a changable horizontal starting spot
     int positionH = 150;
+    
     // sets a changable vertical starting spot
     int positionV = 300;
+    
     // adds gravity into the program
     int gravity = 0;
+    
     // is it punching?
     boolean leftPunch = false;
     boolean rightPunch = false;
+    
     // helps with animation
     int animationFrameL = 0;
     int animationFrameR = 0;
+    
     // back skip variable
     boolean backSkip = false;
     int skipTimer = 0;
+    
     // for one punch easter egg
     Color Peach = new Color(252, 200, 159);
     boolean opm = false;
     int timer = 0;
+    
+    // variables for the punching bag
+    double healthBar = 100;
+    int momentum;
+    Rectangle bag = new Rectangle(800, 200, 100, 300);
+    Rectangle string = new Rectangle(845, 0, 10, 300);
 
     // GAME VARIABLES END HERE    
     // Constructor to create the Frame and place the panel in
@@ -116,11 +131,20 @@ public class FightingGame extends JComponent implements ActionListener {
     @Override
     public void paintComponent(Graphics g) {
         // always clear the screen first!
-        g.clearRect(0, 0, WIDTH, HEIGHT);
+        if(opm == true){ 
+            if (leftPunch == true || rightPunch == true){
+                g.setColor(Color.BLACK);
+            }
+        } else {
+            g.setColor(Color.WHITE);
+        } 
+        
+        g.fillRect(0, 0, WIDTH, HEIGHT);
 
         Graphics2D g2d = (Graphics2D) g;
 
         // GAME DRAWING GOES HERE
+        
         g.setColor(Color.BLACK);
         g2d.setStroke(biggerLine);
 
@@ -147,15 +171,14 @@ public class FightingGame extends JComponent implements ActionListener {
         limbMath(g2d, leftArm);
         limbMath(g2d, rightArm);
 
-        if (opm == true) {
-            g.setColor(Color.YELLOW);
-        } else {
-            g.setColor(Color.BLACK);
-        }
         limbMath(g2d, leftLeg);
         limbMath(g2d, rightLeg);
 
-
+        // draw the punching bag
+        g.setColor(Color.BLACK);
+        g2d.fill(bag);
+        g2d.fill(string);
+        
         // GAME DRAWING ENDS HERE
     }
 
@@ -283,12 +306,12 @@ public class FightingGame extends JComponent implements ActionListener {
             gravity = 0;
             backSkip = false;
         } else if (positionV < 300) {
-            gravity = 5;
+            gravity = 3;
         }
 
         // adds a small back skip/dash animation
         if (backSkip = true && skipTimer < 11 && skipTimer > 0) {
-            positionV = positionV - 10;
+            positionV = positionV - 15;
             skipTimer++;
         } else if (skipTimer >= 11){
             skipTimer = 0;
@@ -351,6 +374,31 @@ public class FightingGame extends JComponent implements ActionListener {
 
         }
 
+    }
+    
+    // WIP
+    void animation (int animationFrame, boolean animation){
+        
+        
+        if (animation == true && animationFrame > 0 && animationFrame < 10) {
+            moveLAV = moveLAV - 8;
+            moveLAH = moveLAH + 14;
+            animationFrame++;
+
+            // reset the varibles for the thrid part
+        } else if (animationFrame == 10) {
+            animation = false;
+            animationFrame = 20;
+            // move the arm back    
+        } else if (animationFrame > 11 && animationFrame <= 20) {
+            moveLAV = moveLAV + 8;
+            moveLAH = moveLAH - 14;
+            animationFrame--;
+            // allow the punch to happen again    
+        } else if (animationFrame == 11) {
+            animationFrame = 0;
+        }
+        
     }
 
     // Used to implement any of the Mouse Actions
