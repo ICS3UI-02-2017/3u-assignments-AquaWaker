@@ -64,9 +64,14 @@ public class FightingGame extends JComponent implements ActionListener {
     
     // sets a changable horizontal starting spot
     int positionH = 150;
+    int runAnime = 0;
+    int runTimer = 0;
+    int runLU = 0;
+    int runRU = 0;
     
     // sets a changable vertical starting spot
-    int positionV = 300;
+    int positionV = 310;
+    int bottemLegV = 525;
     
     // adds gravity into the program
     int gravity = 0;
@@ -202,14 +207,14 @@ public class FightingGame extends JComponent implements ActionListener {
         if (limb[7] == 1) {
             if (angle2 > angle1) {
                 double angleD = angle1 - angle2;
-                angle2 = angle1 + angleD;
+                angle2 = angle1;; // + angleD;
                 limb[0] = limb[2] + Math.cos(angle2) * limb[6];
                 limb[1] = limb[3] + Math.sin(angle2) * limb[6];
             }
         } else if (limb[7] == 0) {
-            if (angle2 > angle1) {
+            if (angle2 < angle1) {
                 double angleD = angle1 - angle2;
-                angle2 = angle1 - angleD;
+                angle2 = angle1; // - angleD;
                 limb[0] = limb[2] + Math.cos(angle2) * limb[6];
                 limb[1] = limb[3] + Math.sin(angle2) * limb[6];
             }
@@ -274,8 +279,7 @@ public class FightingGame extends JComponent implements ActionListener {
     // In here is where all the logic for my game will go
     public void gameLoop() {
 
-
-
+        // set all of the positions
         leftArm[2] = positionH;
         leftArm[3] = (positionV + 2);
 
@@ -284,13 +288,13 @@ public class FightingGame extends JComponent implements ActionListener {
 
         leftLeg[2] = positionH;
         leftLeg[3] = (positionV + 100);
-        leftLeg[4] = positionH - 25;
-        leftLeg[5] = (positionV + 225);
+        leftLeg[4] = positionH + runAnime - 25;
+        leftLeg[5] = bottemLegV + runLU;
 
         rightLeg[2] = positionH;
         rightLeg[3] = (positionV + 100);
-        rightLeg[5] = (positionV + 225);
-        rightLeg[4] = positionH + 25;
+        rightLeg[5] = bottemLegV + runRU;
+        rightLeg[4] = positionH - runAnime + 25;
 
         leftArm[4] = (positionH - 25) + moveLAH;
         leftArm[5] = positionV + 100 + moveLAV;
@@ -298,24 +302,61 @@ public class FightingGame extends JComponent implements ActionListener {
         rightArm[4] = (positionH + 25) + moveRAH;
         rightArm[5] = positionV + 100 + moveRAV;
 
+        // running animation
+        if(moveRP1 == true && runTimer >= 0 && runTimer < 10){
+            runAnime = runAnime + 5;
+            runTimer++;
+            
+            // raise the left leg during the run
+            if(runTimer >= 0 && runTimer < 5){
+                runLU = runLU - 10;
+            } else if (runTimer >=5 && runTimer < 9){
+                runLU = runLU + 10;
+            }
+            
+        } else if(moveRP1 == true && runTimer >= 10 && runTimer < 20) {
+            runAnime = runAnime - 5;
+            runTimer++;
+            
+            // raise the right leg during the run
+            if(runTimer >= 10 && runTimer < 15){
+                runRU = runRU - 10;
+            } else if (runTimer >= 15 && runTimer < 19){
+                runRU = runRU + 10;
+            }
+        
+        // reset the leg positions
+        } else if (moveRP1 == false){
+            runAnime = 0;
+            runLU = 0;
+            runRU = 0;
+        }
+        
+        // reset the animation
+        if(runTimer >= 20){
+            runTimer = 0;
+        }
+        
+        
         // sets gravity to work when needed
         positionV = positionV + gravity;
 
-        if (positionV >= 300) {
-            positionV = 300;
+        if (positionV > 310) {
+            positionV = 310;
             gravity = 0;
             backSkip = false;
-        } else if (positionV < 300) {
-            gravity = 3;
+            skipTimer = 0;
+            // allows another jump
+        } else if (positionV < 310) {
+            gravity = 10;
         }
 
         // adds a small back skip/dash animation
-        if (backSkip = true && skipTimer < 11 && skipTimer > 0) {
-            positionV = positionV - 15;
+        if (backSkip = true && skipTimer < 8 && skipTimer > 0) {
+            positionV = positionV - 10;
+            positionH = positionH - 5;
             skipTimer++;
-        } else if (skipTimer >= 11){
-            skipTimer = 0;
-        }
+        } 
 
         // allows the figure to move across the area
         if (moveLP1 == true) {
@@ -442,7 +483,7 @@ public class FightingGame extends JComponent implements ActionListener {
             if (keyCode == KeyEvent.VK_A) {
                 moveLP1 = true;
 
-                if (backSkip = false) {
+                if (backSkip == false) {
                     if (skipTimer == 0) {
                         backSkip = true;
                         skipTimer = 1;
