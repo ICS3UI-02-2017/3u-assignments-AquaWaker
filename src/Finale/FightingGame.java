@@ -101,6 +101,7 @@ public class FightingGame extends JComponent implements ActionListener {
     Rectangle bag = new Rectangle(800, 200, 100, 300);
     Rectangle string = new Rectangle(845, 0, 10, 300);
     boolean haveBeenPunched = false;
+    boolean onePunched = false;
 
     // GAME VARIABLES END HERE    
     // Constructor to create the Frame and place the panel in
@@ -441,17 +442,29 @@ public class FightingGame extends JComponent implements ActionListener {
         if (bag.contains(leftArm[4], leftArm[5]) && leftPunching == true) {
             if (opm == false){
                 healthBar = healthBar - 1;
-            } else {
+            } else if (opm == true) {
                 healthBar = 0;
+                onePunched = true;
             }
 
         } else if (bag.contains(rightArm[4], rightArm[5]) && rightPunching == true) {
             if (opm == false){
                 healthBar = healthBar - 1;
-            } else {
+            } else if (opm == true) {
                 healthBar = 0;
+                onePunched = true;
             }
         }
+        
+        // if the bag is one punched it flies around the world infinitely
+        if (healthBar == 0 && onePunched =dddddad= true){
+            bag.x = bag.x + 50;
+            
+        }
+        if (bag.x >= 2000){
+            bag.x = - 1000;
+        }
+        
     }
 
     // WIP
