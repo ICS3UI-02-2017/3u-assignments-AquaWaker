@@ -77,8 +77,10 @@ public class FightingGame extends JComponent implements ActionListener {
     int gravity = 0;
     
     // is it punching?
-    boolean leftPunch = false;
-    boolean rightPunch = false;
+    boolean activateLPunch = false;
+    boolean activateRPunch = false;
+    boolean leftPunching = false;
+    boolean rightPunching = false;
     
     // helps with animation
     int animationFrameL = 0;
@@ -98,6 +100,7 @@ public class FightingGame extends JComponent implements ActionListener {
     int momentum;
     Rectangle bag = new Rectangle(800, 200, 100, 300);
     Rectangle string = new Rectangle(845, 0, 10, 300);
+    boolean haveBeenPunched = false;
 
     // GAME VARIABLES END HERE    
     // Constructor to create the Frame and place the panel in
@@ -136,20 +139,20 @@ public class FightingGame extends JComponent implements ActionListener {
     @Override
     public void paintComponent(Graphics g) {
         // always clear the screen first!
-        if(opm == true){ 
-            if (leftPunch == true || rightPunch == true){
+        if (opm == true) {
+            if (leftPunching == true || rightPunching == true) {
                 g.setColor(Color.BLACK);
             }
         } else {
             g.setColor(Color.WHITE);
-        } 
-        
+        }
+
         g.fillRect(0, 0, WIDTH, HEIGHT);
 
         Graphics2D g2d = (Graphics2D) g;
 
         // GAME DRAWING GOES HERE
-        
+
         g.setColor(Color.BLACK);
         g2d.setStroke(biggerLine);
 
@@ -183,7 +186,16 @@ public class FightingGame extends JComponent implements ActionListener {
         g.setColor(Color.BLACK);
         g2d.fill(bag);
         g2d.fill(string);
-        
+
+        // Punching bag health bar
+        g.fillRect(325, 25, 350, 50);
+        g.setColor(Color.RED);
+        g.fillRect(350, 30, 300, 40);
+        g.setColor(Color.GREEN);
+        g.fillRect(350, 30, (3 * (int) healthBar), 40);
+
+
+
         // GAME DRAWING ENDS HERE
     }
 
@@ -302,42 +314,43 @@ public class FightingGame extends JComponent implements ActionListener {
         rightArm[4] = (positionH + 25) + moveRAH;
         rightArm[5] = positionV + 100 + moveRAV;
 
+
         // running animation
-        if(moveRP1 == true && runTimer >= 0 && runTimer < 10){
+        if (moveRP1 == true && runTimer >= 0 && runTimer < 10) {
             runAnime = runAnime + 5;
             runTimer++;
-            
+
             // raise the left leg during the run
-            if(runTimer >= 0 && runTimer < 5){
+            if (runTimer >= 0 && runTimer < 5) {
                 runLU = runLU - 10;
-            } else if (runTimer >=5 && runTimer < 9){
+            } else if (runTimer >= 5 && runTimer < 9) {
                 runLU = runLU + 10;
             }
-            
-        } else if(moveRP1 == true && runTimer >= 10 && runTimer < 20) {
+
+        } else if (moveRP1 == true && runTimer >= 10 && runTimer < 20) {
             runAnime = runAnime - 5;
             runTimer++;
-            
+
             // raise the right leg during the run
-            if(runTimer >= 10 && runTimer < 15){
+            if (runTimer >= 10 && runTimer < 15) {
                 runRU = runRU - 10;
-            } else if (runTimer >= 15 && runTimer < 19){
+            } else if (runTimer >= 15 && runTimer < 19) {
                 runRU = runRU + 10;
             }
-        
-        // reset the leg positions
-        } else if (moveRP1 == false){
+
+            // reset the leg positions
+        } else if (moveRP1 == false) {
             runAnime = 0;
             runLU = 0;
             runRU = 0;
         }
-        
+
         // reset the animation
-        if(runTimer >= 20){
+        if (runTimer >= 20) {
             runTimer = 0;
         }
-        
-        
+
+
         // sets gravity to work when needed
         positionV = positionV + gravity;
 
@@ -356,7 +369,7 @@ public class FightingGame extends JComponent implements ActionListener {
             positionV = positionV - 10;
             positionH = positionH - 5;
             skipTimer++;
-        } 
+        }
 
         // allows the figure to move across the area
         if (moveLP1 == true) {
@@ -372,16 +385,25 @@ public class FightingGame extends JComponent implements ActionListener {
             positionH = WIDTH;
         }
 
+        // set the animations to start 
+        if (activateLPunch == true && animationFrameL == 0) {
+            animationFrameL = 1;
+            leftPunching = true;
+        } else if (activateRPunch == true && animationFrameR == 0) {
+            animationFrameR = 1;
+            rightPunching = true;
+        }
+
         // Perform the left punch animation 
         // move the arm forward
-        if (leftPunch == true && animationFrameL > 0 && animationFrameL < 10) {
+        if (leftPunching == true && animationFrameL > 0 && animationFrameL < 10) {
             moveLAV = moveLAV - 8;
             moveLAH = moveLAH + 14;
             animationFrameL++;
 
             // reset the varibles for the thrid part
         } else if (animationFrameL == 10) {
-            leftPunch = false;
+            leftPunching = false;
             animationFrameL = 20;
             // move the arm back    
         } else if (animationFrameL > 11 && animationFrameL <= 20) {
@@ -395,13 +417,13 @@ public class FightingGame extends JComponent implements ActionListener {
 
         // Perform the right punch animation 
         // move the arm forward
-        if (rightPunch == true && animationFrameR > 0 && animationFrameR < 10) {
+        if (rightPunching == true && animationFrameR > 0 && animationFrameR < 10) {
             moveRAV = moveRAV - 10;
             moveRAH = moveRAH + 10;
             animationFrameR++;
             // reset the varibles for the thrid part
         } else if (animationFrameR == 10) {
-            rightPunch = false;
+            rightPunching = false;
             animationFrameR = 20;
             // move the arm back    
         } else if (animationFrameR > 11 && animationFrameR <= 20) {
@@ -415,12 +437,27 @@ public class FightingGame extends JComponent implements ActionListener {
 
         }
 
+        // punch the punching bag
+        if (bag.contains(leftArm[4], leftArm[5]) && leftPunching == true) {
+            if (opm == false){
+                healthBar = healthBar - 1;
+            } else {
+                healthBar = 0;
+            }
+
+        } else if (bag.contains(rightArm[4], rightArm[5]) && rightPunching == true) {
+            if (opm == false){
+                healthBar = healthBar - 1;
+            } else {
+                healthBar = 0;
+            }
+        }
     }
-    
+
     // WIP
-    void animation (int animationFrame, boolean animation){
-        
-        
+    void animation(int animationFrame, boolean animation) {
+
+
         if (animation == true && animationFrame > 0 && animationFrame < 10) {
             moveLAV = moveLAV - 8;
             moveLAH = moveLAH + 14;
@@ -439,7 +476,7 @@ public class FightingGame extends JComponent implements ActionListener {
         } else if (animationFrame == 11) {
             animationFrame = 0;
         }
-        
+
     }
 
     // Used to implement any of the Mouse Actions
@@ -496,17 +533,13 @@ public class FightingGame extends JComponent implements ActionListener {
 
                 // do the left punch
             } else if (keyCode == KeyEvent.VK_Q) {
-                if (animationFrameL == 0) {
-                    leftPunch = true;
-                    animationFrameL = 1;
-                }
+                activateLPunch = true;
+
 
                 // do the right punch
             } else if (keyCode == KeyEvent.VK_E) {
-                if (animationFrameR == 0) {
-                    rightPunch = true;
-                    animationFrameR = 1;
-                }
+                activateRPunch = true;
+
             } // Qwap physics
             // move left arm up
             else if (keyCode == KeyEvent.VK_T) {
@@ -579,6 +612,16 @@ public class FightingGame extends JComponent implements ActionListener {
                 // reset timer for opm
             } else if (keyCode == KeyEvent.VK_P) {
                 timer = 0;
+                
+              // stop continuous punches  
+            } else if (keyCode == KeyEvent.VK_Q) {
+                activateLPunch = false;
+
+
+              // stop continuous punches  
+            } else if (keyCode == KeyEvent.VK_E) {
+                activateRPunch = false;
+
             }
 
         }
