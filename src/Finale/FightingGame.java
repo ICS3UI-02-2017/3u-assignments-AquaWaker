@@ -97,9 +97,12 @@ public class FightingGame extends JComponent implements ActionListener {
     double[] x = new double[numSegments];
     double[] y = new double[numSegments];
     double[] angle = new double[numSegments];
-    double segLength = 26;
+    double segLength = 25;
     double targetX = 0;
     double targetY = 0;
+    
+    int endReachX = 845;
+    int endReachY = 200;
 
     // GAME VARIABLES END HERE    
     // Constructor to create the Frame and place the panel in
@@ -181,13 +184,16 @@ public class FightingGame extends JComponent implements ActionListener {
         limbMath(g2d, leftLeg);
         limbMath(g2d, rightLeg);
 
-        // draw the punching bag
-        g.setColor(Color.BLACK);
-        g2d.fill(bag);
-
         // play with the string
         g.setColor(Color.BLACK);
         string(g);
+        
+        // draw the punching bag
+        g2d.translate(bag.x+bag.width/2, bag.y);
+        g2d.rotate(angle[0] - (Math.PI/2));
+        g2d.fillRect(-bag.width/2, 0, bag.width, bag.height);
+        g2d.rotate(- (angle[0] - (Math.PI/2)));
+        g2d.translate(-bag.x-bag.width/2, -bag.y);
 
         // Punching bag health bar
         g.fillRect(325, 25, 350, 50);
@@ -221,7 +227,7 @@ public class FightingGame extends JComponent implements ActionListener {
         if (limb[7] == 1) {
             if (angle2 > angle1) {
                 double angleD = angle1 - angle2;
-                angle2 = angle1;; // + angleD;
+                angle2 = angle1; // + angleD;
                 limb[0] = limb[2] + Math.cos(angle2) * limb[6];
                 limb[1] = limb[3] + Math.sin(angle2) * limb[6];
             }
@@ -263,8 +269,9 @@ public class FightingGame extends JComponent implements ActionListener {
         x[x.length - 1] = 845;     // Set base x-coordinate
         y[x.length - 1] = 0;  // Set base y-coordinate
 
+        
         // 
-        reachSegment(0, mouseX, mouseY);
+        reachSegment(0, endReachX, endReachY);
         for (int i = 1; i < numSegments; i++) {
             reachSegment(i, targetX, targetY);
         }
@@ -274,6 +281,8 @@ public class FightingGame extends JComponent implements ActionListener {
         for (int i = 0; i < x.length; i++) {
             segment(g2d, x[i], y[i], angle[i], segLength);
         }
+        
+        
 
     }
 
@@ -324,7 +333,7 @@ public class FightingGame extends JComponent implements ActionListener {
         rightLeg[6] = 62.5;
         rightLeg[7] = 1;
 
-
+        
     }
 
     // The main game loop
@@ -354,6 +363,9 @@ public class FightingGame extends JComponent implements ActionListener {
         rightArm[4] = (positionH + 25) + moveRAH;
         rightArm[5] = positionV + 100 + moveRAV;
 
+        // bag is attached to string
+        bag.x = (int)x[0] - 45;
+        bag.y = (int)y[0];
 
         // running animation
         if (moveRP1 == true && runTimer >= 0 && runTimer < 10) {
