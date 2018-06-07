@@ -70,6 +70,7 @@ public class FightingGame extends JComponent implements ActionListener {
     int bottemLegV = 525;
     // adds gravity into the program
     int gravity = 0;
+    int bagGravity = 1;
     // is it punching?
     boolean activateLPunch = false;
     boolean activateRPunch = false;
@@ -91,6 +92,7 @@ public class FightingGame extends JComponent implements ActionListener {
     Rectangle bag = new Rectangle(800, 200, 100, 300);
     Rectangle string = new Rectangle(845, 0, 10, 300);
     boolean haveBeenPunched = false;
+    int punchedTimer = 0;
     boolean onePunched = false;
     // string animation
     int numSegments = 8;
@@ -363,9 +365,18 @@ public class FightingGame extends JComponent implements ActionListener {
         rightArm[4] = (positionH + 25) + moveRAH;
         rightArm[5] = positionV + 100 + moveRAV;
 
+        // stop the legs from going into the ground
+        if (rightLeg[5] > 525){
+            rightLeg[5] = 525;
+        } else if (leftLeg[5] > 525){
+            leftLeg[5] = 525;
+        }
+        
         // bag is attached to string
-        bag.x = (int)x[0] - 45;
-        bag.y = (int)y[0];
+        if (onePunched == false){
+            bag.x = (int)x[0] - 45;
+            bag.y = (int)y[0];
+        }
 
         // running animation
         if (moveRP1 == true && runTimer >= 0 && runTimer < 10) {
@@ -489,23 +500,71 @@ public class FightingGame extends JComponent implements ActionListener {
 
         }
 
-        // punch the punching bag
+        // punching the punching bag does damage it and starts it moving
+        // left punch hits
         if (bag.contains(leftArm[4], leftArm[5]) && leftPunching == true) {
             if (opm == false) {
                 healthBar = healthBar - 1;
+                if (haveBeenPunched == false){
+                    haveBeenPunched = true;
+                } else if (haveBeenPunched == true){
+                    punchedTimer = 0;
+                    haveBeenPunched = true;
+                }
+                
             } else if (opm == true) {
                 healthBar = 0;
                 onePunched = true;
             }
 
+            // right punch hits
         } else if (bag.contains(rightArm[4], rightArm[5]) && rightPunching == true) {
             if (opm == false) {
                 healthBar = healthBar - 1;
+                
+                if (haveBeenPunched == false){
+                    haveBeenPunched = true;
+                } else if (haveBeenPunched == true){
+                    punchedTimer = 0;
+                    haveBeenPunched = true;
+                }
+                
             } else if (opm == true) {
                 healthBar = 0;
                 onePunched = true;
             }
         }
+        
+        // Bag swings when it's punched
+        if (haveBeenPunched == true && punchedTimer == 0){
+            punchedTimer = 1;
+        }
+        
+        if (punchedTimer > 0 && punchedTimer < 11){
+           endReachX = endReachX + 5;
+           endReachY = endReachY - 1;
+           punchedTimer++;
+        } else if (punchedTimer > 10 && punchedTimer < 21){
+           endReachX = endReachX - 5;
+           endReachY = endReachY + 1;
+           punchedTimer++;
+        } else if (punchedTimer > 20){
+            haveBeenPunched = false;
+            punchedTimer = 0;
+        }
+        
+        // bag tries to go back to it's original position
+        
+        endReachY = endReachY + bagGravity;
+        
+        if (!(punchedTimer > 0 && punchedTimer < 11) && endReachX > 845){
+            endReachX = endReachX - 5;
+        } else if (!(punchedTimer > 0 && punchedTimer < 11) && endReachX < 845){
+            endReachX = endReachX + 5;
+        }  else if (!(punchedTimer > 0 && punchedTimer < 11) && endReachY > 200){
+            endReachY = 200;
+        }
+        
 
         // if the bag is one punched it flies around the world infinitely
         if (healthBar == 0 && onePunched == true) {
