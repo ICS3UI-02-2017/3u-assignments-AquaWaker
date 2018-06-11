@@ -107,6 +107,8 @@ public class FightingGame extends JComponent implements ActionListener {
     
     int endReachX = 845;
     int endReachY = 200;
+    
+    boolean intercepts = false;
 
     // GAME VARIABLES END HERE    
     // Constructor to create the Frame and place the panel in
@@ -207,7 +209,14 @@ public class FightingGame extends JComponent implements ActionListener {
         g.fillRect(350, 30, (3 * (int) healthBar), 40);
 
 //        hitBoxRotation();
-//        g.fillPolygon((int)hitBoxX[], (int)hitBoxY[], 4);
+//        int[] hbx = new int[4];
+//        int[] hby = new int[4];
+//        for(int i = 0; i < 4; i++){
+//            hbx[i] = (int)hitBoxX[i];
+//            hby[i] = (int)hitBoxY[i];
+//        }
+//        g2d.setColor(Color.BLUE);
+//        g.fillPolygon(hbx, hby, 4);
 
         
         // GAME DRAWING ENDS HERE
@@ -516,8 +525,22 @@ public class FightingGame extends JComponent implements ActionListener {
 
         }
 
+//        if(!(leftArm[4] < hitBoxX[0] && leftArm[4] > hitBoxX[1] && leftArm[4] > hitBoxX[2] && leftArm[4] < hitBoxX[3] &&
+//             leftArm[5] < hitBoxY[0] && leftArm[5] < hitBoxY[1] && leftArm[5] > hitBoxY[2] && leftArm[5] > hitBoxY[3])){
+//        intercepts = true;
+//    } else {
+//            intercepts = false;
+//        }
+//        
+//        if(intercepts == true){
+//            System.out.println("ITS TRUE");
+//        } else {
+//            System.out.println("ITS FALSE");
+//        }
+        
         // punching the punching bag does damage it and starts it moving
         // left punch hits
+        
         if (bag.contains(leftArm[4], leftArm[5]) && leftPunching == true) {
             if (opm == false) {
                 healthBar = healthBar - 1;
@@ -553,7 +576,6 @@ public class FightingGame extends JComponent implements ActionListener {
                 onePunched = true;
             }
         }
-        
         // Bag swings when it's punched
         if (haveBeenPunched == true && punchedTimer == 0){
             punchedTimer = 1;
@@ -607,15 +629,15 @@ public class FightingGame extends JComponent implements ActionListener {
         // y = x * sinA + y * cosA
         // bag.x+bag.width/2, bag.y
         // -bag.width/2, 0, bag.width, bag.height
-        hitBoxX[0] = (-bag.width/2) * Math.cos(angle[0]) - 0 * Math.sin(angle[0]);  // box.x 
-        hitBoxX[1] = bag.width/2 * Math.cos(angle[0]) - 0 * Math.sin(angle[0]);  // box.x + bag.width
-        hitBoxX[2] = bag.width/2 * Math.cos(angle[0]) - bag.height * Math.sin(angle[0]);  // box.x + bag.width
-        hitBoxX[3] = (-bag.width/2) * Math.cos(angle[0]) - bag.height * Math.sin(angle[0]);  // box.x
+        hitBoxX[0] = (-bag.width/6) * Math.cos(angle[0] - (Math.PI/2)) - 0 * Math.sin(angle[0] - (Math.PI/2)) + bag.x;  // box.x 
+        hitBoxX[1] = bag.width/6 * Math.cos(angle[0] - (Math.PI/2)) - 0 * Math.sin(angle[0] - (Math.PI/2)) + bag.x + bag.width;  // box.x + bag.width
+        hitBoxX[2] = bag.width/6 * Math.cos(angle[0] - (Math.PI/2)) - bag.height * Math.sin(angle[0] - (Math.PI/2)) + bag.x + bag.width;  // box.x + bag.width
+        hitBoxX[3] = (-bag.width/6) * Math.cos(angle[0] - (Math.PI/2)) - bag.height * Math.sin(angle[0] - (Math.PI/2)) + bag.x;  // box.x
         
-        hitBoxY[0] = (-bag.width/2) * Math.sin(angle[0]) + 0 * Math.cos(angle[0]);  // box.y
-        hitBoxY[1] = bag.width/2 * Math.sin(angle[0]) + 0 * Math.cos(angle[0]);  // box.y
-        hitBoxY[2] = bag.width/2 * Math.sin(angle[0]) + bag.height * Math.cos(angle[0]);  // box.y + bag.height
-        hitBoxY[3] = (-bag.width/2) * Math.sin(angle[0]) + bag.height * Math.cos(angle[0]);  // box.y + bag.height
+        hitBoxY[0] = (-bag.width/6) * Math.sin(angle[0] - (Math.PI/2)) + 0 * Math.cos(angle[0] - (Math.PI/2)) + bag.y;  // box.y
+        hitBoxY[1] = bag.width/6 * Math.sin(angle[0] - (Math.PI/2)) + 0 * Math.cos(angle[0] - (Math.PI/2)) + bag.y;  // box.y
+        hitBoxY[2] = bag.width/6 * Math.sin(angle[0] - (Math.PI/2)) + bag.height * Math.cos(angle[0] - (Math.PI/2)) + bag.height/2;  // box.y + bag.height
+        hitBoxY[3] = (-bag.width/6) * Math.sin(angle[0] - (Math.PI/2)) + bag.height * Math.cos(angle[0] - (Math.PI/2)) + bag.height/2;  // box.y + bag.height
         
         
     }
