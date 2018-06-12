@@ -104,10 +104,8 @@ public class FightingGame extends JComponent implements ActionListener {
     double segLength = 25;
     double targetX = 0;
     double targetY = 0;
-    
     int endReachX = 845;
     int endReachY = 200;
-    
     boolean intercepts = false;
 
     // GAME VARIABLES END HERE    
@@ -193,13 +191,13 @@ public class FightingGame extends JComponent implements ActionListener {
         // play with the string
         g.setColor(Color.BLACK);
         string(g);
-        
+
         // draw the punching bag
-        g2d.translate(bag.x+bag.width/2, bag.y);
-        g2d.rotate(angle[0] - (Math.PI/2));
-        g2d.fillRect(-bag.width/2, 0, bag.width, bag.height);
-        g2d.rotate(- (angle[0] - (Math.PI/2)));
-        g2d.translate(-bag.x-bag.width/2, -bag.y);
+        g2d.translate(bag.x + bag.width / 2, bag.y);
+        g2d.rotate(angle[0] - (Math.PI / 2));
+        g2d.fillRect(-bag.width / 2, 0, bag.width, bag.height);
+        g2d.rotate(-(angle[0] - (Math.PI / 2)));
+        g2d.translate(-bag.x - bag.width / 2, -bag.y);
 
         // Punching bag health bar
         g.fillRect(325, 25, 350, 50);
@@ -218,7 +216,7 @@ public class FightingGame extends JComponent implements ActionListener {
 //        g2d.setColor(Color.BLUE);
 //        g.fillPolygon(hbx, hby, 4);
 
-        
+
         // GAME DRAWING ENDS HERE
     }
 
@@ -291,7 +289,7 @@ public class FightingGame extends JComponent implements ActionListener {
         x[x.length - 1] = 845;     // Set base x-coordinate
         y[x.length - 1] = 0;  // Set base y-coordinate
 
-        
+
         // 
         reachSegment(0, endReachX, endReachY);
         for (int i = 1; i < numSegments; i++) {
@@ -303,8 +301,8 @@ public class FightingGame extends JComponent implements ActionListener {
         for (int i = 0; i < x.length; i++) {
             segment(g2d, x[i], y[i], angle[i], segLength);
         }
-        
-        
+
+
 
     }
 
@@ -336,7 +334,7 @@ public class FightingGame extends JComponent implements ActionListener {
     // This is run before the game loop begins!
     public void preSetup() {
         // Any of your pre setup before the loop starts should go here
-        
+
         // set the starting position of all the non-changing limb parts
         leftArm[0] = 0;
         leftArm[1] = 0;
@@ -358,7 +356,7 @@ public class FightingGame extends JComponent implements ActionListener {
         rightLeg[6] = 62.5;
         rightLeg[7] = 1;
 
-        
+
     }
 
     // The main game loop
@@ -387,20 +385,20 @@ public class FightingGame extends JComponent implements ActionListener {
 
         rightArm[4] = (positionH + 25) + moveRAH;
         rightArm[5] = positionV + 100 + moveRAV;
-        
-        
+
+
 
         // stop the legs from going into the ground
-        if (rightLeg[5] > 525){
+        if (rightLeg[5] > 525) {
             rightLeg[5] = 525;
-        } else if (leftLeg[5] > 525){
+        } else if (leftLeg[5] > 525) {
             leftLeg[5] = 525;
         }
-        
+
         // bag is attached to string
-        if (onePunched == false){
-            bag.x = (int)x[0] - 45;
-            bag.y = (int)y[0];
+        if (onePunched == false) {
+            bag.x = (int) x[0] - 45;
+            bag.y = (int) y[0];
         }
 
         // running animation
@@ -537,20 +535,20 @@ public class FightingGame extends JComponent implements ActionListener {
 //        } else {
 //            System.out.println("ITS FALSE");
 //        }
-        
+
         // punching the punching bag does damage it and starts it moving
         // left punch hits
-        
+
         if (bag.contains(leftArm[4], leftArm[5]) && leftPunching == true) {
             if (opm == false) {
                 healthBar = healthBar - 1;
-                if (haveBeenPunched == false){
+                if (haveBeenPunched == false) {
                     haveBeenPunched = true;
-                } else if (haveBeenPunched == true){
+                } else if (haveBeenPunched == true) {
                     punchedTimer = 0;
                     haveBeenPunched = true;
                 }
-                
+
             } else if (opm == true) {
                 healthBar = 0;
                 onePunched = true;
@@ -562,11 +560,11 @@ public class FightingGame extends JComponent implements ActionListener {
             if (opm == false) {
                 // bag health goes down
                 healthBar = healthBar - 1;
-                
+
                 // starts the swinging
-                if (haveBeenPunched == false){
+                if (haveBeenPunched == false) {
                     haveBeenPunched = true;
-                } else if (haveBeenPunched == true){
+                } else if (haveBeenPunched == true) {
                     punchedTimer = 0;
                     haveBeenPunched = true;
                 }
@@ -577,38 +575,38 @@ public class FightingGame extends JComponent implements ActionListener {
             }
         }
         // Bag swings when it's punched
-        if (haveBeenPunched == true && punchedTimer == 0){
+        if (haveBeenPunched == true && punchedTimer == 0) {
             punchedTimer = 1;
         }
-        
+
         // it swings right
-        if (punchedTimer > 0 && punchedTimer < 11){
-           endReachX = endReachX + 5;
-           endReachY = endReachY - 1;
-           punchedTimer++;
-        // it swings left
-        } else if (punchedTimer > 10 && punchedTimer < 41){
-           endReachX = endReachX - 5;
-           endReachY = endReachY + 1;
-           punchedTimer++;
-        // resets the animation
-        } else if (punchedTimer > 40){
+        if (punchedTimer > 0 && punchedTimer < 11) {
+            endReachX = endReachX + 5;
+            endReachY = endReachY - 1;
+            punchedTimer++;
+            // it swings left
+        } else if (punchedTimer > 10 && punchedTimer < 41) {
+            endReachX = endReachX - 5;
+            endReachY = endReachY + 1;
+            punchedTimer++;
+            // resets the animation
+        } else if (punchedTimer > 40) {
             haveBeenPunched = false;
             punchedTimer = 0;
         }
-        
+
         // bag tries to go back to it's original position
         // gravity for the bag
         endReachY = endReachY + bagGravity;
-        
-        if (!(punchedTimer > 0 && punchedTimer < 11) && endReachX > 845){
+
+        if (!(punchedTimer > 0 && punchedTimer < 11) && endReachX > 845) {
             endReachX = endReachX - 5;
-        } else if (!(punchedTimer > 0 && punchedTimer < 11) && endReachX < 845){
+        } else if (!(punchedTimer > 0 && punchedTimer < 11) && endReachX < 845) {
             endReachX = endReachX + 5;
-        }  else if (endReachY > 200){
+        } else if (endReachY > 200) {
             endReachY = 200;
         }
-        
+
 
         // if the bag is one punched it flies around the world infinitely
         if (healthBar == 0 && onePunched == true) {
@@ -618,28 +616,28 @@ public class FightingGame extends JComponent implements ActionListener {
         if (bag.x >= 2000) {
             bag.x = - 1000;
         }
-        
-        
+
+
 
     }
-    
-    void hitBoxRotation(){
-        
+
+    void hitBoxRotation() {
+
         // x = x * cosA - y * sinA
         // y = x * sinA + y * cosA
         // bag.x+bag.width/2, bag.y
         // -bag.width/2, 0, bag.width, bag.height
-        hitBoxX[0] = (-bag.width/6) * Math.cos(angle[0] - (Math.PI/2)) - 0 * Math.sin(angle[0] - (Math.PI/2)) + bag.x;  // box.x 
-        hitBoxX[1] = bag.width/6 * Math.cos(angle[0] - (Math.PI/2)) - 0 * Math.sin(angle[0] - (Math.PI/2)) + bag.x + bag.width;  // box.x + bag.width
-        hitBoxX[2] = bag.width/6 * Math.cos(angle[0] - (Math.PI/2)) - bag.height * Math.sin(angle[0] - (Math.PI/2)) + bag.x + bag.width;  // box.x + bag.width
-        hitBoxX[3] = (-bag.width/6) * Math.cos(angle[0] - (Math.PI/2)) - bag.height * Math.sin(angle[0] - (Math.PI/2)) + bag.x;  // box.x
-        
-        hitBoxY[0] = (-bag.width/6) * Math.sin(angle[0] - (Math.PI/2)) + 0 * Math.cos(angle[0] - (Math.PI/2)) + bag.y;  // box.y
-        hitBoxY[1] = bag.width/6 * Math.sin(angle[0] - (Math.PI/2)) + 0 * Math.cos(angle[0] - (Math.PI/2)) + bag.y;  // box.y
-        hitBoxY[2] = bag.width/6 * Math.sin(angle[0] - (Math.PI/2)) + bag.height * Math.cos(angle[0] - (Math.PI/2)) + bag.height/2;  // box.y + bag.height
-        hitBoxY[3] = (-bag.width/6) * Math.sin(angle[0] - (Math.PI/2)) + bag.height * Math.cos(angle[0] - (Math.PI/2)) + bag.height/2;  // box.y + bag.height
-        
-        
+        hitBoxX[0] = (-bag.width / 6) * Math.cos(angle[0] - (Math.PI / 2)) - 0 * Math.sin(angle[0] - (Math.PI / 2)) + bag.x;  // box.x 
+        hitBoxX[1] = bag.width / 6 * Math.cos(angle[0] - (Math.PI / 2)) - 0 * Math.sin(angle[0] - (Math.PI / 2)) + bag.x + bag.width;  // box.x + bag.width
+        hitBoxX[2] = bag.width / 6 * Math.cos(angle[0] - (Math.PI / 2)) - bag.height * Math.sin(angle[0] - (Math.PI / 2)) + bag.x + bag.width;  // box.x + bag.width
+        hitBoxX[3] = (-bag.width / 6) * Math.cos(angle[0] - (Math.PI / 2)) - bag.height * Math.sin(angle[0] - (Math.PI / 2)) + bag.x;  // box.x
+
+        hitBoxY[0] = (-bag.width / 6) * Math.sin(angle[0] - (Math.PI / 2)) + 0 * Math.cos(angle[0] - (Math.PI / 2)) + bag.y;  // box.y
+        hitBoxY[1] = bag.width / 6 * Math.sin(angle[0] - (Math.PI / 2)) + 0 * Math.cos(angle[0] - (Math.PI / 2)) + bag.y;  // box.y
+        hitBoxY[2] = bag.width / 6 * Math.sin(angle[0] - (Math.PI / 2)) + bag.height * Math.cos(angle[0] - (Math.PI / 2)) + bag.height / 2;  // box.y + bag.height
+        hitBoxY[3] = (-bag.width / 6) * Math.sin(angle[0] - (Math.PI / 2)) + bag.height * Math.cos(angle[0] - (Math.PI / 2)) + bag.height / 2;  // box.y + bag.height
+
+
     }
 
     // Used to implement any of the Mouse Actions
