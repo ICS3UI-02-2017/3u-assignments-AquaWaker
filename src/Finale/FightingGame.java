@@ -38,11 +38,14 @@ public class FightingGame extends JComponent implements ActionListener {
     // this is what keeps our time running smoothly :)
     Timer gameTimer;
     // YOUR GAME VARIABLES WOULD GO HERE
+    // line sizes
     BasicStroke biggerLine = new BasicStroke(5);
     BasicStroke bigishLine = new BasicStroke(3);
     BasicStroke normal = new BasicStroke();
+    // movement variables for the character
     boolean moveLP1 = false;
     boolean moveRP1 = false;
+    // make something follow the mouse
     int mouseX = 0;
     int mouseY = 0;
     // make the limbs
@@ -50,10 +53,6 @@ public class FightingGame extends JComponent implements ActionListener {
     double[] leftLeg = new double[8];
     double[] rightLeg = new double[8];
     double[] rightArm = new double[8];
-    double[] leftArmP2 = new double[8];
-    double[] leftLegP2 = new double[8];
-    double[] rightLegP2 = new double[8];
-    double[] rightArmP2 = new double[8];
     // movement variables
     int moveLAV = 0;
     int moveRAV = 0;
@@ -71,7 +70,7 @@ public class FightingGame extends JComponent implements ActionListener {
     // adds gravity into the program
     int gravity = 0;
     int bagGravity = 1;
-    // is it punching?
+    // are the arms punching?
     boolean activateLPunch = false;
     boolean activateRPunch = false;
     boolean leftPunching = false;
@@ -91,22 +90,29 @@ public class FightingGame extends JComponent implements ActionListener {
     int momentum;
     Rectangle bag = new Rectangle(800, 200, 100, 300);
     Rectangle string = new Rectangle(845, 0, 10, 300);
+    // array to make a hit box
     double hitBoxX[] = new double[4];
     double hitBoxY[] = new double[4];
+    // check to see if the bag has been hit and do whats required if it is
     boolean haveBeenPunched = false;
     int punchedTimer = 0;
     boolean onePunched = false;
     // string animation
+    // how long it is
     int numSegments = 8;
+    // arrays that store the positions and the angles of the segments
     double[] x = new double[numSegments];
     double[] y = new double[numSegments];
     double[] angle = new double[numSegments];
+    // length of the segments
     double segLength = 25;
     double targetX = 0;
     double targetY = 0;
+    // where the end of the string starts
     int endReachX = 845;
     int endReachY = 200;
-    boolean intercepts = false;
+    // boolean for making the bag fall over
+    boolean fallenOver = false;
 
     // GAME VARIABLES END HERE    
     // Constructor to create the Frame and place the panel in
@@ -145,6 +151,7 @@ public class FightingGame extends JComponent implements ActionListener {
     @Override
     public void paintComponent(Graphics g) {
         // always clear the screen first!
+        // change the colour of the screen if you are One Punch Man
         if (opm == true) {
             if (leftPunching == true || rightPunching == true) {
                 g.setColor(Color.BLACK);
@@ -152,9 +159,10 @@ public class FightingGame extends JComponent implements ActionListener {
         } else {
             g.setColor(Color.WHITE);
         }
-
+        // clear the screen
         g.fillRect(0, 0, WIDTH + 100, HEIGHT + 100);
 
+        // set up the advanced graphics code
         Graphics2D g2d = (Graphics2D) g;
 
         // GAME DRAWING GOES HERE
@@ -193,11 +201,15 @@ public class FightingGame extends JComponent implements ActionListener {
         string(g);
 
         // draw the punching bag
-        g2d.translate(bag.x + bag.width / 2, bag.y);
-        g2d.rotate(angle[0] - (Math.PI / 2));
-        g2d.fillRect(-bag.width / 2, 0, bag.width, bag.height);
-        g2d.rotate(-(angle[0] - (Math.PI / 2)));
-        g2d.translate(-bag.x - bag.width / 2, -bag.y);
+        if (healthBar !=0){
+            g2d.translate(bag.x + bag.width / 2, bag.y);
+            g2d.rotate(angle[0] - (Math.PI / 2));
+            g2d.fillRect(-bag.width / 2, 0, bag.width, bag.height);
+            g2d.rotate(-(angle[0] - (Math.PI / 2)));
+            g2d.translate(-bag.x - bag.width / 2, -bag.y);
+        } else {
+            g2d.fill(bag);
+        }
 
         // Punching bag health bar
         g.fillRect(325, 25, 350, 50);
@@ -206,6 +218,7 @@ public class FightingGame extends JComponent implements ActionListener {
         g.setColor(Color.GREEN);
         g.fillRect(350, 30, (3 * (int) healthBar), 40);
 
+        // Display the trial of the hit box
 //        hitBoxRotation();
 //        int[] hbx = new int[4];
 //        int[] hby = new int[4];
@@ -290,8 +303,9 @@ public class FightingGame extends JComponent implements ActionListener {
         y[x.length - 1] = 0;  // Set base y-coordinate
 
 
-        // 
+        // draw the first segment
         reachSegment(0, endReachX, endReachY);
+        // draw each segment after the first
         for (int i = 1; i < numSegments; i++) {
             reachSegment(i, targetX, targetY);
         }
@@ -307,11 +321,13 @@ public class FightingGame extends JComponent implements ActionListener {
     }
 
     void positionSegment(int a, int b) {
+        // the next points position
         x[b] = x[a] + Math.cos(angle[a]) * segLength;
         y[b] = y[a] + Math.sin(angle[a]) * segLength;
     }
 
     void reachSegment(int i, double xin, double yin) {
+        // rotate the points
         double dx = xin - x[i];
         double dy = yin - y[i];
         angle[i] = Math.atan2(dy, dx);
@@ -335,7 +351,7 @@ public class FightingGame extends JComponent implements ActionListener {
     public void preSetup() {
         // Any of your pre setup before the loop starts should go here
 
-        // set the starting position of all the non-changing limb parts
+        // set the starting position of all the non-changing limb parts and lengths
         leftArm[0] = 0;
         leftArm[1] = 0;
         leftArm[6] = 60;
@@ -386,8 +402,15 @@ public class FightingGame extends JComponent implements ActionListener {
         rightArm[4] = (positionH + 25) + moveRAH;
         rightArm[5] = positionV + 100 + moveRAV;
 
-
-
+        // move the bag back to a regular width and height
+        if(healthBar != 0){
+            bag.width = 100;
+            bag.height = 300;
+        }
+        // if the FPS is changed
+        desiredTime = Math.round((1000 / desiredFPS));
+        
+        
         // stop the legs from going into the ground
         if (rightLeg[5] > 525) {
             rightLeg[5] = 525;
@@ -538,86 +561,117 @@ public class FightingGame extends JComponent implements ActionListener {
 
         // punching the punching bag does damage it and starts it moving
         // left punch hits
+        if (healthBar != 0) {
+            bag.x = 850;
+            if (bag.contains(leftArm[4], leftArm[5]) && leftPunching == true) {
+                if (opm == false) {
+                    healthBar = healthBar - 1;
+                    if (haveBeenPunched == false) {
+                        haveBeenPunched = true;
+                    } else if (haveBeenPunched == true) {
+                        punchedTimer = 0;
+                        haveBeenPunched = true;
+                    }
 
-        if (bag.contains(leftArm[4], leftArm[5]) && leftPunching == true) {
-            if (opm == false) {
-                healthBar = healthBar - 1;
-                if (haveBeenPunched == false) {
-                    haveBeenPunched = true;
-                } else if (haveBeenPunched == true) {
-                    punchedTimer = 0;
-                    haveBeenPunched = true;
+                } else if (opm == true) {
+                    healthBar = 0;
+                    onePunched = true;
                 }
 
-            } else if (opm == true) {
-                healthBar = 0;
-                onePunched = true;
-            }
+                // right punch hits
+            } else if (bag.contains(rightArm[4], rightArm[5]) && rightPunching == true) {
+                // if you are not one punch man
+                if (opm == false) {
+                    // bag health goes down
+                    healthBar = healthBar - 1;
 
-            // right punch hits
-        } else if (bag.contains(rightArm[4], rightArm[5]) && rightPunching == true) {
-            // if you are not one punch man
-            if (opm == false) {
-                // bag health goes down
-                healthBar = healthBar - 1;
-
-                // starts the swinging
-                if (haveBeenPunched == false) {
-                    haveBeenPunched = true;
-                } else if (haveBeenPunched == true) {
-                    punchedTimer = 0;
-                    haveBeenPunched = true;
+                    // starts the swinging
+                    if (haveBeenPunched == false) {
+                        haveBeenPunched = true;
+                    } else if (haveBeenPunched == true) {
+                        punchedTimer = 0;
+                        haveBeenPunched = true;
+                    }
+                    // if one punch man is true, insta-kill the bag
+                } else if (opm == true) {
+                    healthBar = 0;
+                    onePunched = true;
                 }
-                // if one punch man is true, insta-kill the bag
-            } else if (opm == true) {
-                healthBar = 0;
-                onePunched = true;
+            }
+            // Bag swings when it's punched
+            if (haveBeenPunched == true && punchedTimer == 0) {
+                punchedTimer = 1;
+            }
+
+            // it swings right
+            if (punchedTimer > 0 && punchedTimer < 11) {
+                endReachX = endReachX + 5;
+                endReachY = endReachY - 1;
+                punchedTimer++;
+                // it swings left
+            } else if (punchedTimer > 10 && punchedTimer < 41) {
+                endReachX = endReachX - 5;
+                endReachY = endReachY + 1;
+                punchedTimer++;
+                // resets the animation
+            } else if (punchedTimer > 40) {
+                haveBeenPunched = false;
+                punchedTimer = 0;
+            }
+
+            // bag tries to go back to it's original position
+            // gravity for the bag
+            endReachY = endReachY + bagGravity;
+
+            if (!(punchedTimer > 0 && punchedTimer < 11) && endReachX > 845) {
+                endReachX = endReachX - 5;
+            } else if (!(punchedTimer > 0 && punchedTimer < 11) && endReachX < 845) {
+                endReachX = endReachX + 5;
+            } else if (endReachY > 200) {
+                endReachY = 200;
             }
         }
-        // Bag swings when it's punched
-        if (haveBeenPunched == true && punchedTimer == 0) {
-            punchedTimer = 1;
-        }
-
-        // it swings right
-        if (punchedTimer > 0 && punchedTimer < 11) {
-            endReachX = endReachX + 5;
-            endReachY = endReachY - 1;
-            punchedTimer++;
-            // it swings left
-        } else if (punchedTimer > 10 && punchedTimer < 41) {
-            endReachX = endReachX - 5;
-            endReachY = endReachY + 1;
-            punchedTimer++;
-            // resets the animation
-        } else if (punchedTimer > 40) {
-            haveBeenPunched = false;
-            punchedTimer = 0;
-        }
-
-        // bag tries to go back to it's original position
-        // gravity for the bag
-        endReachY = endReachY + bagGravity;
-
-        if (!(punchedTimer > 0 && punchedTimer < 11) && endReachX > 845) {
-            endReachX = endReachX - 5;
-        } else if (!(punchedTimer > 0 && punchedTimer < 11) && endReachX < 845) {
-            endReachX = endReachX + 5;
-        } else if (endReachY > 200) {
-            endReachY = 200;
-        }
-
 
         // if the bag is one punched it flies around the world infinitely
         if (healthBar == 0 && onePunched == true) {
             bag.x = bag.x + 50;
 
+        } else if (healthBar == 0 && onePunched == false) {
+            punchBagDeath();
         }
+        // when it's far off it sends the bag to the other side of the screen
         if (bag.x >= 2000) {
             bag.x = - 1000;
         }
 
 
+
+    }
+
+    void punchBagDeath() {
+
+        
+
+        // bag falls to the ground
+        
+        while (bag.y + bag.height < 525){
+            bag.y = bag.y + 1;
+            
+        }
+        bag.y = 525 - bag.height;
+
+        if (fallenOver == false) {
+            if (bag.contains(leftArm[4], leftArm[5]) && leftPunching == true) {
+                bag = new Rectangle(800, 425, 300, 100);
+                fallenOver = true;
+            } else if (bag.contains(rightArm[4], rightArm[5]) && rightPunching == true) {
+                bag = new Rectangle(800, 425, 300, 100);
+                fallenOver = true;
+            }
+
+
+
+        }
 
     }
 
@@ -627,6 +681,7 @@ public class FightingGame extends JComponent implements ActionListener {
         // y = x * sinA + y * cosA
         // bag.x+bag.width/2, bag.y
         // -bag.width/2, 0, bag.width, bag.height
+        // Rotates the bag hit box
         hitBoxX[0] = (-bag.width / 6) * Math.cos(angle[0] - (Math.PI / 2)) - 0 * Math.sin(angle[0] - (Math.PI / 2)) + bag.x;  // box.x 
         hitBoxX[1] = bag.width / 6 * Math.cos(angle[0] - (Math.PI / 2)) - 0 * Math.sin(angle[0] - (Math.PI / 2)) + bag.x + bag.width;  // box.x + bag.width
         hitBoxX[2] = bag.width / 6 * Math.cos(angle[0] - (Math.PI / 2)) - bag.height * Math.sin(angle[0] - (Math.PI / 2)) + bag.x + bag.width;  // box.x + bag.width
