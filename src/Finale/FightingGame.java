@@ -587,12 +587,12 @@ public class FightingGame extends JComponent implements ActionListener {
            endReachY = endReachY - 1;
            punchedTimer++;
         // it swings left
-        } else if (punchedTimer > 10 && punchedTimer < 21){
+        } else if (punchedTimer > 10 && punchedTimer < 41){
            endReachX = endReachX - 5;
            endReachY = endReachY + 1;
            punchedTimer++;
         // resets the animation
-        } else if (punchedTimer > 20){
+        } else if (punchedTimer > 40){
             haveBeenPunched = false;
             punchedTimer = 0;
         }
