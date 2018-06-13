@@ -81,10 +81,6 @@ public class FightingGame extends JComponent implements ActionListener {
     // back skip variable
     boolean backSkip = false;
     int skipTimer = 0;
-    // for one punch easter egg
-    Color Peach = new Color(252, 200, 159);
-    boolean opm = false;
-    int timer = 0;
     // variables for the punching bag
     double healthBar = 100;
     int momentum;
@@ -113,6 +109,15 @@ public class FightingGame extends JComponent implements ActionListener {
     int endReachY = 200;
     // boolean for making the bag fall over
     boolean fallenOver = false;
+    // for one punch easter egg
+    Color Peach = new Color(252, 200, 159);
+    boolean opm = false;
+    int timer = 0;
+    // for Hulk easter egg
+    BasicStroke hulkedOut = new BasicStroke(50);
+    Color trunks = new Color(153, 0, 204);
+    Color gamma = new Color(0, 128, 0);
+    boolean hulk = false;
 
     // GAME VARIABLES END HERE    
     // Constructor to create the Frame and place the panel in
@@ -168,7 +173,13 @@ public class FightingGame extends JComponent implements ActionListener {
         // GAME DRAWING GOES HERE
 
         g.setColor(Color.BLACK);
-        g2d.setStroke(biggerLine);
+        if (opm == true && hulk == true) {
+            g2d.setStroke(biggerLine);
+        } else if (hulk == true) {
+            g2d.setStroke(hulkedOut);
+        } else {
+            g2d.setStroke(biggerLine);
+        }
 
         // make the ground
         g.fillRect(0, 525, WIDTH + 100, 100);
@@ -176,6 +187,8 @@ public class FightingGame extends JComponent implements ActionListener {
         // draw head
         if (opm == true) {
             g.setColor(Peach);
+        } else if (hulk == true) {
+            g.setColor(gamma);
         } else {
             g.setColor(Color.BLACK);
         }
@@ -184,24 +197,27 @@ public class FightingGame extends JComponent implements ActionListener {
         // draw body
         if (opm == true) {
             g.setColor(Color.YELLOW);
+        } else if (hulk == true) {
+            g.setColor(gamma);
         } else {
             g.setColor(Color.BLACK);
         }
         g.drawLine(positionH, positionV, positionH, (positionV + 100));
 
         // draw limbs
+        limbMath(g2d, leftLeg);
+        limbMath(g2d, rightLeg);
         limbMath(g2d, leftArm);
         limbMath(g2d, rightArm);
 
-        limbMath(g2d, leftLeg);
-        limbMath(g2d, rightLeg);
 
         // play with the string
         g.setColor(Color.BLACK);
+        g2d.setStroke(biggerLine);
         string(g);
 
         // draw the punching bag
-        if (healthBar !=0){
+        if (healthBar != 0) {
             g2d.translate(bag.x + bag.width / 2, bag.y);
             g2d.rotate(angle[0] - (Math.PI / 2));
             g2d.fillRect(-bag.width / 2, 0, bag.width, bag.height);
@@ -218,22 +234,11 @@ public class FightingGame extends JComponent implements ActionListener {
         g.setColor(Color.GREEN);
         g.fillRect(350, 30, (3 * (int) healthBar), 40);
 
-        // Display the trial of the hit box
-//        hitBoxRotation();
-//        int[] hbx = new int[4];
-//        int[] hby = new int[4];
-//        for(int i = 0; i < 4; i++){
-//            hbx[i] = (int)hitBoxX[i];
-//            hby[i] = (int)hitBoxY[i];
-//        }
-//        g2d.setColor(Color.BLUE);
-//        g.fillPolygon(hbx, hby, 4);
-
 
         // GAME DRAWING ENDS HERE
     }
 
-    // determines the angle
+    // creates the limbs positions 
     void limbMath(Graphics2D g2d, double[] limb) {
 
         // determines the angle that the bottem leg will be at 
@@ -276,6 +281,8 @@ public class FightingGame extends JComponent implements ActionListener {
         // changes the colour of the segments of the limbs
         if (opm == true) {
             g2d.setColor(Color.RED);
+        } else if (hulk == true) {
+            g2d.setColor(gamma);
         } else {
             g2d.setColor(Color.BLACK);
         }
@@ -285,6 +292,10 @@ public class FightingGame extends JComponent implements ActionListener {
         // changes the colour of the segments of the limbs
         if (opm == true) {
             g2d.setColor(Color.YELLOW);
+        } else if (hulk == true && limb[7] == 1) {
+            g2d.setColor(trunks);
+        } else if (hulk == true) {
+            g2d.setColor(gamma);
         } else {
             g2d.setColor(Color.BLACK);
         }
@@ -293,6 +304,7 @@ public class FightingGame extends JComponent implements ActionListener {
         segment(g2d, limb[2], limb[3], angle2, limb[6]);
     }
 
+    // runs all of the methods that make string 
     void string(Graphics g) {
 
         // allows the draw
@@ -320,14 +332,15 @@ public class FightingGame extends JComponent implements ActionListener {
 
     }
 
+    // determines where the next point in the sequence will be
     void positionSegment(int a, int b) {
         // the next points position
         x[b] = x[a] + Math.cos(angle[a]) * segLength;
         y[b] = y[a] + Math.sin(angle[a]) * segLength;
     }
 
+    // rotate the points
     void reachSegment(int i, double xin, double yin) {
-        // rotate the points
         double dx = xin - x[i];
         double dy = yin - y[i];
         angle[i] = Math.atan2(dy, dx);
@@ -335,9 +348,9 @@ public class FightingGame extends JComponent implements ActionListener {
         targetY = yin - Math.sin(angle[i]) * segLength;
     }
 
+    // moves the screen to create a rotated limb
     void segment(Graphics2D g, double x, double y, double a, double seglength) {
 
-        // moves the screen to create a rotated limb
         g.translate(x, y);
         g.rotate(a);
         g.drawLine(0, 0, (int) seglength, 0);
@@ -403,14 +416,11 @@ public class FightingGame extends JComponent implements ActionListener {
         rightArm[5] = positionV + 100 + moveRAV;
 
         // move the bag back to a regular width and height
-        if(healthBar != 0){
+        if (healthBar != 0) {
             bag.width = 100;
             bag.height = 300;
         }
-        // if the FPS is changed
-        desiredTime = Math.round((1000 / desiredFPS));
-        
-        
+
         // stop the legs from going into the ground
         if (rightLeg[5] > 525) {
             rightLeg[5] = 525;
@@ -546,23 +556,9 @@ public class FightingGame extends JComponent implements ActionListener {
 
         }
 
-//        if(!(leftArm[4] < hitBoxX[0] && leftArm[4] > hitBoxX[1] && leftArm[4] > hitBoxX[2] && leftArm[4] < hitBoxX[3] &&
-//             leftArm[5] < hitBoxY[0] && leftArm[5] < hitBoxY[1] && leftArm[5] > hitBoxY[2] && leftArm[5] > hitBoxY[3])){
-//        intercepts = true;
-//    } else {
-//            intercepts = false;
-//        }
-//        
-//        if(intercepts == true){
-//            System.out.println("ITS TRUE");
-//        } else {
-//            System.out.println("ITS FALSE");
-//        }
-
         // punching the punching bag does damage it and starts it moving
         // left punch hits
         if (healthBar != 0) {
-            bag.x = 850;
             if (bag.contains(leftArm[4], leftArm[5]) && leftPunching == true) {
                 if (opm == false) {
                     healthBar = healthBar - 1;
@@ -584,7 +580,6 @@ public class FightingGame extends JComponent implements ActionListener {
                 if (opm == false) {
                     // bag health goes down
                     healthBar = healthBar - 1;
-
                     // starts the swinging
                     if (haveBeenPunched == false) {
                         haveBeenPunched = true;
@@ -602,35 +597,35 @@ public class FightingGame extends JComponent implements ActionListener {
             if (haveBeenPunched == true && punchedTimer == 0) {
                 punchedTimer = 1;
             }
-
-            // it swings right
-            if (punchedTimer > 0 && punchedTimer < 11) {
-                endReachX = endReachX + 5;
-                endReachY = endReachY - 1;
-                punchedTimer++;
-                // it swings left
-            } else if (punchedTimer > 10 && punchedTimer < 41) {
-                endReachX = endReachX - 5;
-                endReachY = endReachY + 1;
-                punchedTimer++;
-                // resets the animation
-            } else if (punchedTimer > 40) {
-                haveBeenPunched = false;
-                punchedTimer = 0;
-            }
-
-            // bag tries to go back to it's original position
-            // gravity for the bag
-            endReachY = endReachY + bagGravity;
-
-            if (!(punchedTimer > 0 && punchedTimer < 11) && endReachX > 845) {
-                endReachX = endReachX - 5;
-            } else if (!(punchedTimer > 0 && punchedTimer < 11) && endReachX < 845) {
-                endReachX = endReachX + 5;
-            } else if (endReachY > 200) {
-                endReachY = 200;
-            }
         }
+        // it swings right
+        if (punchedTimer > 0 && punchedTimer < 11) {
+            endReachX = endReachX + 5;
+            endReachY = endReachY - 1;
+            punchedTimer++;
+            // it swings left
+        } else if (punchedTimer > 10 && punchedTimer < 31) {
+            endReachX = endReachX - 5;
+            endReachY = endReachY + 1;
+            punchedTimer++;
+            // resets the animation
+        } else if (punchedTimer > 30) {
+            haveBeenPunched = false;
+            punchedTimer = 0;
+        }
+
+        // bag tries to go back to it's original position
+        // gravity for the bag
+        endReachY = endReachY + bagGravity;
+
+        if (!(punchedTimer > 0 && punchedTimer < 11) && endReachX > 845) {
+            endReachX = endReachX - 5;
+        } else if (!(punchedTimer > 0 && punchedTimer < 11) && endReachX < 845) {
+            endReachX = endReachX + 5;
+        } else if (endReachY > 200) {
+            endReachY = 200;
+        }
+
 
         // if the bag is one punched it flies around the world infinitely
         if (healthBar == 0 && onePunched == true) {
@@ -649,14 +644,11 @@ public class FightingGame extends JComponent implements ActionListener {
     }
 
     void punchBagDeath() {
-
-        
-
         // bag falls to the ground
-        
-        while (bag.y + bag.height < 525){
+
+        while (bag.y + bag.height < 525) {
             bag.y = bag.y + 1;
-            
+
         }
         bag.y = 525 - bag.height;
 
@@ -675,6 +667,7 @@ public class FightingGame extends JComponent implements ActionListener {
 
     }
 
+    // a function to make a box that can be rotated manually
     void hitBoxRotation() {
 
         // x = x * cosA - y * sinA
@@ -804,7 +797,21 @@ public class FightingGame extends JComponent implements ActionListener {
                         timer++;
                     }
                 }
+                // incredible Hulk easter egg
+            } else if (keyCode == KeyEvent.VK_B) {
+                if (timer == 0) {
+                    if (hulk == true) {
+                        hulk = false;
+                        timer++;
 
+                    }
+                }
+                if (timer == 0) {
+                    if (hulk == false) {
+                        hulk = true;
+                        timer++;
+                    }
+                }
                 // reset the bag health
             } else if (keyCode == KeyEvent.VK_ENTER) {
                 if (healthBar <= 0) {
@@ -845,6 +852,10 @@ public class FightingGame extends JComponent implements ActionListener {
                 // stop continuous punches  
             } else if (keyCode == KeyEvent.VK_E) {
                 activateRPunch = false;
+
+                // reset timer for hulk
+            } else if (keyCode == KeyEvent.VK_B) {
+                timer = 0;
 
             }
 
