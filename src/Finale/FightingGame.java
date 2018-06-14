@@ -15,6 +15,9 @@ import java.awt.event.MouseWheelEvent;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import javax.imageio.ImageIO;
 import javax.swing.Timer;
 
 /**
@@ -114,10 +117,14 @@ public class FightingGame extends JComponent implements ActionListener {
     boolean opm = false;
     int timer = 0;
     // for Hulk easter egg
-    BasicStroke hulkedOut = new BasicStroke(50);
+    BasicStroke hulkedOut = new BasicStroke(30);
+    int gammaStrength = 1;
     Color trunks = new Color(153, 0, 204);
     Color gamma = new Color(0, 128, 0);
     boolean hulk = false;
+    // change the colour of the punching bag
+    int bagColour = 0;
+    BufferedImage face = loadImage("blah.jpg");
 
     // GAME VARIABLES END HERE    
     // Constructor to create the Frame and place the panel in
@@ -148,6 +155,17 @@ public class FightingGame extends JComponent implements ActionListener {
         gameTimer = new Timer(desiredTime, this);
         gameTimer.setRepeats(true);
         gameTimer.start();
+    }
+
+    // gain an image
+    BufferedImage loadImage(String name) {
+        BufferedImage img = null;
+        try {
+            img = ImageIO.read(new File(name));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return img;
     }
 
     // drawing of the game happens in here
@@ -216,6 +234,31 @@ public class FightingGame extends JComponent implements ActionListener {
         g2d.setStroke(biggerLine);
         string(g);
 
+        // change the coloour of the bag
+        if (bagColour == 0) {
+            g.setColor(Color.BLACK);
+        } else if (bagColour == 1) {
+            g.setColor(Color.RED);
+        } else if (bagColour == 2) {
+            g.setColor(Color.ORANGE);
+        } else if (bagColour == 3) {
+            g.setColor(Color.YELLOW);
+        } else if (bagColour == 4) {
+            g.setColor(Color.GREEN);
+        } else if (bagColour == 5) {
+            g.setColor(Color.CYAN);
+        } else if (bagColour == 6) {
+            g.setColor(Color.BLUE);
+        } else if (bagColour == 7) {
+            g.setColor(trunks);
+        } else if (bagColour == 8) {
+            g.setColor(Color.MAGENTA);
+        } else if (bagColour == 9) {
+            g.setColor(Color.PINK);
+        } else if (bagColour == 10) {
+            bagColour = 0;
+        }
+
         // draw the punching bag
         if (healthBar != 0) {
             g2d.translate(bag.x + bag.width / 2, bag.y);
@@ -228,6 +271,7 @@ public class FightingGame extends JComponent implements ActionListener {
         }
 
         // Punching bag health bar
+        g.setColor(Color.BLACK);
         g.fillRect(325, 25, 350, 50);
         g.setColor(Color.RED);
         g.fillRect(350, 30, 300, 40);
@@ -327,9 +371,6 @@ public class FightingGame extends JComponent implements ActionListener {
         for (int i = 0; i < x.length; i++) {
             segment(g2d, x[i], y[i], angle[i], segLength);
         }
-
-
-
     }
 
     // determines where the next point in the sequence will be
@@ -356,7 +397,6 @@ public class FightingGame extends JComponent implements ActionListener {
         g.drawLine(0, 0, (int) seglength, 0);
         g.rotate(-a);
         g.translate(-x, -y);
-
     }
 
     // This method is used to do any pre-setup you might need to do
@@ -556,6 +596,13 @@ public class FightingGame extends JComponent implements ActionListener {
 
         }
 
+        // back swings more and takes more damage if hulked out
+        if (hulk == true) {
+            gammaStrength = 4;
+        } else {
+            gammaStrength = 1;
+        }
+
         // punching the punching bag does damage it and starts it moving
         // left punch hits
         if (healthBar != 0) {
@@ -579,7 +626,7 @@ public class FightingGame extends JComponent implements ActionListener {
                 // if you are not one punch man
                 if (opm == false) {
                     // bag health goes down
-                    healthBar = healthBar - 1;
+                    healthBar = healthBar - 1 * gammaStrength;
                     // starts the swinging
                     if (haveBeenPunched == false) {
                         haveBeenPunched = true;
@@ -598,15 +645,16 @@ public class FightingGame extends JComponent implements ActionListener {
                 punchedTimer = 1;
             }
         }
+
         // it swings right
         if (punchedTimer > 0 && punchedTimer < 11) {
-            endReachX = endReachX + 5;
-            endReachY = endReachY - 1;
+            endReachX = endReachX + 5 * gammaStrength;
+            endReachY = endReachY - 1 * gammaStrength;
             punchedTimer++;
             // it swings left
         } else if (punchedTimer > 10 && punchedTimer < 31) {
-            endReachX = endReachX - 5;
-            endReachY = endReachY + 1;
+            endReachX = endReachX - 5 * gammaStrength;
+            endReachY = endReachY + 1 * gammaStrength;
             punchedTimer++;
             // resets the animation
         } else if (punchedTimer > 30) {
@@ -819,7 +867,11 @@ public class FightingGame extends JComponent implements ActionListener {
                     bag.x = 800;
                     onePunched = false;
                 }
-
+                // changes the colour of the bag
+            } else if (keyCode == KeyEvent.VK_C) {
+                if (timer == 0) {
+                    bagColour++;
+                }
             }
 
 
@@ -857,6 +909,8 @@ public class FightingGame extends JComponent implements ActionListener {
             } else if (keyCode == KeyEvent.VK_B) {
                 timer = 0;
 
+            } else if (keyCode == KeyEvent.VK_C) {
+                timer = 0;
             }
 
         }
