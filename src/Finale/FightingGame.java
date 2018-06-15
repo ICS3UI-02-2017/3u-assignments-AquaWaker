@@ -13,6 +13,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
@@ -124,8 +125,17 @@ public class FightingGame extends JComponent implements ActionListener {
     boolean hulk = false;
     // change the colour of the punching bag
     int bagColour = 0;
+    // add the ability to add a picture in
     BufferedImage face = loadImage("blah.jpg");
+    // create a custom font
+    Font biggerFont = new Font("comic sans", Font.PLAIN, 15);
+    // the controls
+    String controls = new String("A and D to move");
+    String controlsP2 = new String("Q and E to punch");
+    String controlsP3 = new String("T, G, Y, H, U, I, J and K for QWAP controls");
+    String controlsP4 = new String("There are other hidden options");
 
+    
     // GAME VARIABLES END HERE    
     // Constructor to create the Frame and place the panel in
     // You will learn more about this in Grade 12 :)
@@ -278,6 +288,13 @@ public class FightingGame extends JComponent implements ActionListener {
         g.setColor(Color.GREEN);
         g.fillRect(350, 30, (3 * (int) healthBar), 40);
 
+        // tell the player the controls
+        g.setColor(Color.BLACK);
+        g.setFont(biggerFont);
+        g.drawString(controls, 10, 15);
+        g.drawString(controlsP2, 10, 45);
+        g.drawString(controlsP3, 10, 75);
+        g.drawString(controlsP4, 10, 105);
 
         // GAME DRAWING ENDS HERE
     }
@@ -694,23 +711,23 @@ public class FightingGame extends JComponent implements ActionListener {
     void punchBagDeath() {
         // bag falls to the ground
 
+        // the bag falls to the ground
         while (bag.y + bag.height < 525) {
             bag.y = bag.y + 1;
 
         }
         bag.y = 525 - bag.height;
 
-        if (fallenOver == false) {
-            if (bag.contains(leftArm[4], leftArm[5]) && leftPunching == true) {
-                bag = new Rectangle(800, 425, 300, 100);
-                fallenOver = true;
-            } else if (bag.contains(rightArm[4], rightArm[5]) && rightPunching == true) {
-                bag = new Rectangle(800, 425, 300, 100);
-                fallenOver = true;
-            }
+        // does the bag gets punched over 
+        if (bag.contains(leftArm[4], leftArm[5]) && leftPunching == true) {
+            fallenOver = true;
+        } else if (bag.contains(rightArm[4], rightArm[5]) && rightPunching == true) {
+            fallenOver = true;
 
-
-
+        }
+        // the bag stays on the ground
+        if (fallenOver == true) {
+            bag = new Rectangle(800, 425, 300, 100);
         }
 
     }
