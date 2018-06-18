@@ -125,8 +125,6 @@ public class FightingGame extends JComponent implements ActionListener {
     boolean hulk = false;
     // change the colour of the punching bag
     int bagColour = 0;
-    // add the ability to add a picture in
-    BufferedImage face = loadImage("blah.jpg");
     // create a custom font
     Font biggerFont = new Font("comic sans", Font.PLAIN, 15);
     // the controls
@@ -167,16 +165,6 @@ public class FightingGame extends JComponent implements ActionListener {
         gameTimer.start();
     }
 
-    // gain an image
-    BufferedImage loadImage(String name) {
-        BufferedImage img = null;
-        try {
-            img = ImageIO.read(new File(name));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return img;
-    }
 
     // drawing of the game happens in here
     // we use the Graphics object, g, to perform the drawing
@@ -265,7 +253,7 @@ public class FightingGame extends JComponent implements ActionListener {
             g.setColor(Color.MAGENTA);
         } else if (bagColour == 9) {
             g.setColor(Color.PINK);
-        } else if (bagColour == 10) {
+        } else if (bagColour >= 10) {
             bagColour = 0;
         }
 
@@ -471,18 +459,18 @@ public class FightingGame extends JComponent implements ActionListener {
 
         rightArm[4] = (positionH + 25) + moveRAH;
         rightArm[5] = positionV + 100 + moveRAV;
+        
+        // stop the legs from going into the ground
+        if (rightLeg[5] >= 525) {
+            rightLeg[5] = 525;
+        } else if (leftLeg[5] >= 525) {
+            leftLeg[5] = 525;
+        }
 
         // move the bag back to a regular width and height
         if (healthBar != 0) {
             bag.width = 100;
             bag.height = 300;
-        }
-
-        // stop the legs from going into the ground
-        if (rightLeg[5] > 525) {
-            rightLeg[5] = 525;
-        } else if (leftLeg[5] > 525) {
-            leftLeg[5] = 525;
         }
 
         // bag is attached to string
@@ -493,7 +481,7 @@ public class FightingGame extends JComponent implements ActionListener {
 
         // running animation
         if (moveRP1 == true && runTimer >= 0 && runTimer < 10) {
-            runAnime = runAnime + 5;
+            runAnime = runAnime + 6;
             runTimer++;
 
             // raise the left leg during the run
@@ -504,7 +492,7 @@ public class FightingGame extends JComponent implements ActionListener {
             }
 
         } else if (moveRP1 == true && runTimer >= 10 && runTimer < 20) {
-            runAnime = runAnime - 5;
+            runAnime = runAnime - 6;
             runTimer++;
 
             // raise the right leg during the run
@@ -514,8 +502,9 @@ public class FightingGame extends JComponent implements ActionListener {
                 runRU = runRU + 10;
             }
 
-            // reset the leg positions
+            // reset the leg positions and the timer
         } else if (moveRP1 == false) {
+            runTimer = 0;
             runAnime = 0;
             runLU = 0;
             runRU = 0;
@@ -696,7 +685,7 @@ public class FightingGame extends JComponent implements ActionListener {
         if (healthBar == 0 && onePunched == true) {
             bag.x = bag.x + 50;
 
-        } else if (healthBar == 0 && onePunched == false) {
+        } else if (healthBar <= 0 && onePunched == false) {
             punchBagDeath();
         }
         // when it's far off it sends the bag to the other side of the screen
