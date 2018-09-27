@@ -41,8 +41,9 @@ public class MediaProject extends JComponent implements ActionListener {
     BasicStroke biggerLine = new BasicStroke(5);
     BasicStroke bigishLine = new BasicStroke(3);
     BasicStroke normal = new BasicStroke();
-    Rectangle string = new Rectangle(845, 0, 10, 300);
-    // string animation
+    
+    String[] analysis = new String[10];
+    
     // make something follow the mouse
     int mouseX = 0;
     int mouseY = 0;
@@ -104,6 +105,44 @@ public class MediaProject extends JComponent implements ActionListener {
     // This is run before the game loop begins!
     public void preSetup() {
         // Any of your pre setup before the loop starts should go here
+        
+        analysis[0] = "The Author of this piece of work is K.R. Hamilton, \n
+        and the work is a Game Design Document, or a GDD, for a game called Race’n’Chase";
+
+        
+        analysis[1] = "The purpose of a GDD is to present the idea of a game, with all the specific details, to the team \n
+        that are going to be working on the game that has been laid out for them, and they will use the \n
+        GDD as a reference to make sure everyone is working on the same project, and will be a cane \n
+        for them to walk on while the game takes shape.  This is so that in the end, there is a finished, \n
+        working product that can be put into stores which is where the investment of time and money \n
+        pays back.";
+        
+        analysis[2] = "The ‘arguments’ that the author uses to get their point of the game across comes in two main ideas, \n
+        specification, and gameplay.";
+            
+        analysis[3] = "Now what does it mean by specification?  Specification would include the finer details of the \n
+        project that shape the game to have complete thoughts and function properly, but may not \n
+        include directly any playable part of the game.  Some examples of this are the concept and \n
+        story, the objectives, and finally details that specify system limitations.";
+            
+        analysis[4] = "Concept and store aren’t as important then maybe a game such as Doom, or even the Mario \n
+        bros because of when it was made, because it’s a multiplayer game.  Back in 1995 when this \n
+        game was produced, a game that functioned as a multiplayer cops and robbers time game \n
+        would be what they focused on, not any story.";
+
+        analysis[5] = "Objectives is explained more thoroughly in Race’N’Chase as it describes the goals the player \n
+        will have, whether it be racing across a city from point A to point B, or trying to crash into \n
+        people’s cars, the goals are clearly defined showing a larger focus on the playing aspect of the \n
+        game, rather than any story that they could fit in.";
+            
+        analysis[6] = "Finally the specification includes the details like the system they are programming the game for, \n
+        the main ones being Windows 95 and PlayStation 1, and they go over details such as the ram \n
+        and graphic capabilities that they have to work within so that the game’s intended audience can \n
+        properly play the game.";
+
+        analysis[7] = "
+
+        
     }
 
     // The main game loop
